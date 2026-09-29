@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.2
 
 - Separate attacking and defensive quality while retaining every position's
   contribution to both. Use relative strength and balanced formation tempo so

@@ -2,7 +2,7 @@
   "name": "emifoot",
   "private": true,
   "license": "MIT",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A DOS-inspired football management game with solo careers and live multiplayer.",
   "packageManager": "pnpm@10.12.1",
   "engines": {
