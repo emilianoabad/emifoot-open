@@ -32,8 +32,8 @@ the game rules. Safe-area insets are respected on phones with display cutouts.
   difference, goals scored, then club name.
 - The top two clubs are promoted and the bottom two are relegated. Division 1
   has no promotion; Division 4 has no relegation.
-- A 32-club national cup is played as five single-match knockout rounds. Home
-  advantage is deliberately smaller in the cup and draws go to penalties. The
+- A 32-club national cup is played as five single-match knockout rounds. It uses
+  the same match model as the league, with draws going to penalties. The
   phases run in parallel after league rounds 2, 5, 8, 11, and 14. The manager
   screen names the competition explicitly as `COPA DO BRASIL` and its bracket
   shows the next scheduled phase.
@@ -55,9 +55,9 @@ the game rules. Safe-area insets are respected on phones with display cutouts.
 
 ## Match day
 
-Each club fields 11 players and up to seven substitutes. A valid side needs a
-goalkeeper and may start at most four non-Brazilian players. Injured or suspended
-players cannot start. The game supports ten formations:
+Each club fields 11 players and up to seven substitutes. A valid side needs
+exactly one goalkeeper and may start at most four non-Brazilian players. Injured
+or suspended players cannot start. The game supports ten formations:
 
 1. 3-4-3
 2. 4-3-3
@@ -101,7 +101,8 @@ twice alongside a focused button, or run on paused screens.
 Matches stop at half-time for the human manager. Formation and up to three
 substitutions may be changed before the second half. The deterministic engine
 combines player strength, positional coverage, fitness, morale, tactical shape,
-home support, stadium condition, and a seeded random stream. It produces a
+a fixed home advantage, and a seeded random stream. Supporters and stadium
+condition affect attendance, rather than goal probabilities. The engine produces a
 minute-by-minute log for goals, cards, injuries, and substitutions. Injuries
 are uncommon and weighted by a stable per-player proneness value. The match
 board displays `[+]` when one occurs, automatically sends on the strongest
@@ -123,12 +124,67 @@ lasts about 18 seconds unless the player uses the visible skip control. This is
 slow enough to read scorers and changing scores while keeping rounds short.
 
 Starting repeatedly reduces fitness and resting restores it. Morale follows
-results and playing time, so both values change effective match strength. Base
-strength follows an immutable, hidden peak talent and a smooth age curve.
+results and playing time, so both values change effective match strength.
+Red cards produce one-match suspensions.
+
+### Match probabilities and scorers
+
+Each half draws separate Poisson goal counts for both teams, then assigns the
+goals to outfield players. The second half uses the current lineup, so halftime
+changes affect the remaining match without rewriting the first half. The model
+is shared by league, Copa, Libertadores, AI clubs and human managers.
+
+Every player contributes effective strength `E` (the fitness/morale-adjusted
+value above) to both attacking and defensive quality:
+
+| Position | Attack weight | Defence weight | Scoring weight |
+| --- | ---: | ---: | ---: |
+| Goalkeeper | 0.05 | 1.20 | 0 |
+| Defender | 0.20 | 0.80 | 0.10 |
+| Midfielder | 0.55 | 0.45 | 0.35 |
+| Forward | 0.90 | 0.20 | 1.00 |
+
+For each phase of play, quality is `coverage × sum(E × weight) / sum(n × weight)`,
+where `n` is the number of slots at each position in the selected formation.
+The denominator uses required slots, not the number of present players.
+`coverage = exp(-0.35 m)`, where `m` is half the sum of absolute differences
+between actual and required positional counts. A natural lineup of equally
+strong players therefore has the same quality in every formation. Claiming a
+different shape without supplying its players loses positional coverage.
+
+An attacking formation opens both ends of the pitch. Its tempo contribution is
+`t = 0.07 (forwards - 2) - 0.035 (defenders - 4)`. For one team, the expected
+goals in a half are:
+
+```text
+lambda = 0.7 exp(1.6 tanh(log(own attack / opponent defence))
+                 + own tempo + opponent tempo + venue)
+venue = +0.1 at home, -0.1 away
+```
+
+Relative quality keeps the goal scale stable as divisions and squads improve.
+The contrast is smooth, bounded and strictly increasing: improving any player
+helps both ends, with the player's position determining how much. Stronger
+forwards help prevent goals, but a defender's contribution to defensive quality
+is four times as large for the same improvement within the same lineup.
+Formation tempo changes scoring and conceding together, rather than granting
+a free attacking bonus. The expected goals remain positive and below five per
+half; the actual Poisson draw has no artificial goal cap. Better quality raises
+winning chances without fixing the winner of a particular game.
+
+A scorer's relative weight is `position scoring weight × E^1.25`, normalized
+over the eligible outfield players. Exceptional forwards receive a larger share
+of goals, while teammates still score. Goalkeepers have zero weight. Condition
+affects both team performance and finishing; hidden talent affects matches only
+through the player's current displayed strength.
+
+### Player development
+
+Base strength follows an immutable, hidden peak talent and a smooth age curve.
 Playing with stronger teammates helps; playing in a weaker team can reduce
 current ability, but neither changes the player's underlying talent. Fractional
 ability is saved, so small improvements accumulate before the displayed integer
-changes. Red cards produce one-match suspensions.
+changes.
 
 For peak talent `P`, age `a` and current fractional ability `x`:
 

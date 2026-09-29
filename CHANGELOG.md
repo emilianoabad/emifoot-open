@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Separate attacking and defensive quality while retaining every position's
+  contribution to both. Use relative strength and balanced formation tempo so
+  strong squads have a sustained advantage without removing match upsets.
+- Choose scorers by position, strength, fitness and morale; exclude goalkeepers
+  and require exactly one goalkeeper in the starting eleven.
+- Add mathematical properties and repeated-season simulations for match balance,
+  exceptional forwards, formation tradeoffs, scoring variance and title odds.
+
 ## 1.1.1
 
 - Link to the source repository from the home-screen footer with a pixel-style

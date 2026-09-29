@@ -133,6 +133,18 @@ describe('automatic starting eleven', () => {
     expect(selection.lineup).toContain('M4')
   })
 
+  it('rejects manually starting a second goalkeeper in an outfield position', () => {
+    const team = club([
+      player('G1', 'G', 25), player('G2', 'G', 50),
+      ...Array.from({ length: 4 }, (_, i) => player(`D${i}`, 'D', 20)),
+      ...Array.from({ length: 4 }, (_, i) => player(`M${i}`, 'M', 20)),
+      player('A1', 'A', 20), player('A2', 'A', 20),
+    ])
+    Object.assign(team, autoPickLineup(team))
+    team.lineup = team.lineup.map((id) => id === 'A1' ? 'G1' : id)
+    expect(validateLineup(team)).toBe('A equipa precisa de exatamente um goleiro.')
+  })
+
   it.each(TACTICS)('finds the strongest legal $id selection, checked against every possible eleven', (tactic) => {
     const positions: Position[] = ['G', 'G', ...Array<Position>(6).fill('D'), ...Array<Position>(5).fill('M'), ...Array<Position>(3).fill('A')]
     const team = club(positions.map((position, i) => player(String(i), position, 12 + (i * 7) % 30,

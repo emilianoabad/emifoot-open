@@ -47,8 +47,8 @@ interface MarketMetrics {
   referenceFees: number
 }
 
-function measureSaleOffers(state: GameState): { eligible: number; offers: number } {
-  let eligible = 0
+function measureSaleOffers(state: GameState): { eligible: number; offers: number; overpaid: number; unfunded: number } {
+  let eligible = 0, overpaid = 0, unfunded = 0
   let offers = 0
   for (const club of state.clubs) {
     const perspective = { ...state, manager: { ...state.manager, clubId: club.id } }
@@ -57,9 +57,11 @@ function measureSaleOffers(state: GameState): { eligible: number; offers: number
       if (!state.clubs.some((buyer) => buyer.id !== club.id && buyer.players.length < 24 && getAiTransferInterest(buyer, player) > 0)) continue
       eligible += 1
       if (getPlayerSaleQuote(perspective, player.id).ok) offers += 1
+      else if (player.salary > Math.round(calculatePlayerSalary(player.strength, player.age) * 1.6 / 100) * 100) overpaid += 1
+      else unfunded += 1
     }
   }
-  return { eligible, offers }
+  return { eligible, offers, overpaid, unfunded }
 }
 
 /** Cash-independent upper bound: full stadiums, all sponsors and the entire prize budget. */
@@ -278,6 +280,7 @@ describe('economy balance metrics', () => {
         medianValue: median(players.map((player) => player.value)), medianSalary: median(players.map((player) => player.salary)),
         auctions: market.auctions, transfers: market.transfers, cancellations: market.cancellations, noOfferRate: market.noOffers / market.auctions,
         directSaleOfferRate: sales.offers / sales.eligible, eligibleSales: sales.eligible,
+        overpaidSales: sales.overpaid, unfundedSales: sales.unfunded,
         solventClubs: state.clubs.filter((club) => club.cash >= 0).length,
       }
       expect(record.elitePlayers, context).toBeGreaterThanOrEqual(64)

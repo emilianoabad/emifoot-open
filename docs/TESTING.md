@@ -33,6 +33,7 @@ subdirectory hosting as well as game behavior.
 ```bash
 pnpm test src/ui/useGame.test.tsx
 pnpm test:simulation
+EMIFOOT_MATCH_REPORT=1 pnpm test src/game/match.test.ts --reporter=verbose
 pnpm test:economy
 pnpm test:server
 pnpm test:release
@@ -50,6 +51,25 @@ are ignored by Git.
 Simulation seeds are fixed and each long seed runs as a separate case. Reproduce
 a failure with its reported seed before changing an invariant or timeout. Add
 regressions at the boundary where a bug entered the system.
+
+## Match balance
+
+The match tests check monotonic improvements in strength, fitness and morale,
+role-specific effects at both ends, relative-strength scaling, bounded scoring
+rates, goalkeeper exclusion, scorer strength, and deterministic replays. Every
+formation is checked for coverage and for the absence of an attacking bonus
+without a corresponding increase in exposure. Duplicate starters and changing
+the formation label without changing the players cannot improve team quality.
+
+Fixed-seed simulations compare the actual goal sampler's mean and variance with
+its Poisson expectation, retain draws and upsets, and measure a strength-50
+forward's contribution in a strength-15 side. Two sets of 1,200 double-round-robin
+seasons check that a clearly stronger club wins most titles without winning
+every game, and that equally strong squads have no dominant formation. These
+controlled comparisons hold players and condition constant to isolate match
+probabilities; the full career/economy tests below also exercise fatigue,
+development, transfers and season transitions. `EMIFOOT_MATCH_REPORT=1` prints
+the measured rates with the focused command above.
 
 ## Economy and inflation
 

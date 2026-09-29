@@ -1,4 +1,4 @@
-import { clubLineStrength } from './lineup'
+import { expectedHalfGoals, goalScoringWeight, matchPlayers, matchStrength } from './matchModel'
 import { isNeymarEasterEgg } from './easterEggs'
 import { random, randomInt } from './rng'
 import type { Club, MatchEvent, MatchResult, PendingMatch, Player } from './types'
@@ -24,25 +24,22 @@ function poisson(state: number, lambda: number): { value: number; state: number 
     const roll = random(nextState)
     nextState = roll.state
     probability *= roll.value
-  } while (probability > limit && count < 9)
+  } while (probability > limit)
   return { value: count - 1, state: nextState }
 }
 
 function pickScorer(state: number, club: Club, lineup: string[]): { player: Player; state: number } {
-  const players = lineup.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
-  const weighted = players.flatMap((player) => {
-    const weight = player.position === 'A' ? 5 : player.position === 'M' ? 3 : player.position === 'D' ? 1 : 0
-    return Array.from({ length: Math.max(1, weight) }, () => player)
-  })
-  const result = randomInt(state, 0, weighted.length - 1)
-  return { player: weighted[result.value], state: result.state }
-}
-
-function expectedHalfGoals(attacking: Club, defending: Club, attackLineup: string[], defendLineup: string[], home: boolean): number {
-  const attack = clubLineStrength(attacking, attackLineup)
-  const defence = clubLineStrength(defending, defendLineup)
-  const tacticAttack = Number(attacking.tactic.at(-1)) || 0
-  return clamp(0.62 + (attack - defence) / 22 + tacticAttack * 0.035 + (home ? 0.13 : 0), 0.12, 1.8)
+  const candidates = matchPlayers(club, lineup)
+    .map((player) => ({ player, weight: goalScoringWeight(player) }))
+    .filter(({ weight }) => weight > 0)
+  if (!candidates.length) throw new Error('Cannot select a scorer without an outfield player')
+  const roll = random(state)
+  let remaining = roll.value * candidates.reduce((total, candidate) => total + candidate.weight, 0)
+  for (const candidate of candidates) {
+    remaining -= candidate.weight
+    if (remaining < 0) return { player: candidate.player, state: roll.state }
+  }
+  return { player: candidates[candidates.length - 1].player, state: roll.state }
 }
 
 export function calculateAttendance(home: Club, away: Club, homeLeaguePosition?: number): number {
@@ -67,9 +64,11 @@ function simulateHalf(
   minuteEnd: number,
 ): SimulatedHalf {
   let nextState = state
-  const homeRoll = poisson(nextState, expectedHalfGoals(home, away, homeLineup, awayLineup, true))
+  const homeStrength = matchStrength(home, homeLineup)
+  const awayStrength = matchStrength(away, awayLineup)
+  const homeRoll = poisson(nextState, expectedHalfGoals(homeStrength, awayStrength, true))
   nextState = homeRoll.state
-  const awayRoll = poisson(nextState, expectedHalfGoals(away, home, awayLineup, homeLineup, false))
+  const awayRoll = poisson(nextState, expectedHalfGoals(awayStrength, homeStrength, false))
   nextState = awayRoll.state
   const events: MatchEvent[] = []
 
@@ -104,7 +103,7 @@ function simulateHalf(
     const cardRoll = random(nextState)
     nextState = cardRoll.state
     if (cardRoll.value < 0.34) {
-      const candidates = lineup.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
+      const candidates = matchPlayers(club, lineup)
         // His scripted second-half exit takes precedence over random red cards.
         .filter((player) => !isNeymarEasterEgg(player) || cardRoll.value >= 0.025)
       const index = randomInt(nextState, 0, candidates.length - 1)
@@ -116,7 +115,7 @@ function simulateHalf(
     const injuryRoll = random(nextState)
     nextState = injuryRoll.state
     if (injuryRoll.value < 0.018) {
-      const candidates = lineup.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
+      const candidates = matchPlayers(club, lineup)
         .filter((player) => !isNeymarEasterEgg(player))
       const weightedCandidates = candidates.flatMap((player) => Array.from({ length: Math.max(1, Math.round(player.injuryProneness * 10)) }, () => player))
       const index = randomInt(nextState, 0, weightedCandidates.length - 1)

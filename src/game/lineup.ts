@@ -5,7 +5,7 @@ function available(player: Player): boolean {
   return player.injuryRounds === 0 && player.suspensionRounds === 0
 }
 
-function effectiveStrength(player: Player): number {
+export function effectiveStrength(player: Player): number {
   return player.strength * (0.65 + player.fitness / 250) * (0.8 + player.morale / 500)
 }
 
@@ -112,11 +112,11 @@ export function autoPickLineup(club: Club, tacticId: TacticId = club.tactic): { 
 export function validateLineup(club: Club): string | undefined {
   const starters = club.lineup.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
   if (starters.length !== 11 || new Set(club.lineup).size !== 11) return 'A equipa titular deve ter 11 jogadores.'
-  if (!starters.some((player) => player.position === 'G')) return 'A equipa precisa de um goleiro.'
+  if (starters.filter((player) => player.position === 'G').length !== 1) return 'A equipa precisa de exatamente um goleiro.'
   const replaceableUnavailablePlayer = starters.find((player) => !available(player) && club.players.some((candidate) => (
     available(candidate)
     && !club.lineup.includes(candidate.id)
-    && (player.position !== 'G' || candidate.position === 'G')
+    && (player.position === 'G') === (candidate.position === 'G')
   )))
   if (replaceableUnavailablePlayer) return 'Há jogador lesionado ou suspenso entre os titulares.'
   if (starters.filter((player) => player.nationality !== 'BRA').length > foreignStarterLimit(club)) return 'Só podem jogar quatro estrangeiros.'
@@ -130,17 +130,4 @@ export function replaceStarter(club: Club, outId: string, inId: string): Club {
   const lineup = club.lineup.map((id) => (id === outId ? inId : id))
   const bench = [outId, ...club.bench.filter((id) => id !== inId)].slice(0, 7)
   return { ...club, lineup, bench }
-}
-
-export function clubLineStrength(club: Club, lineupIds: string[] = club.lineup): number {
-  const lineup = lineupIds.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
-  const tactic = tacticById(club.tactic)
-  const counts: Record<Position, number> = { G: 0, D: 0, M: 0, A: 0 }
-  let total = 0
-  for (const player of lineup) {
-    counts[player.position] += 1
-    total += effectiveStrength(player)
-  }
-  const positionalPenalty = Math.abs(counts.D - tactic.defenders) * 0.8 + Math.abs(counts.M - tactic.midfielders) * 0.6 + Math.abs(counts.A - tactic.attackers) * 0.7
-  return Math.max(1, total / Math.max(1, lineup.length) - positionalPenalty)
 }

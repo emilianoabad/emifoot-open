@@ -210,7 +210,8 @@ function automaticInjurySubstitution(club: Club, events: MatchEvent[]): void {
     injured.injuryRounds = Math.max(injured.injuryRounds, event.durationRounds ?? 1)
     if (!club.lineup.includes(injured.id)) continue
     const candidates = club.players
-      .filter((player) => player.id !== injured.id && player.injuryRounds === 0 && player.suspensionRounds === 0 && !club.lineup.includes(player.id))
+      .filter((player) => player.id !== injured.id && player.injuryRounds === 0 && player.suspensionRounds === 0 && !club.lineup.includes(player.id)
+        && (player.position === 'G') === (injured.position === 'G'))
       .sort((a, b) => Number(b.position === injured.position) - Number(a.position === injured.position) || b.strength - a.strength || b.fitness - a.fitness)
     const substitute = candidates[0]
     if (!substitute) continue

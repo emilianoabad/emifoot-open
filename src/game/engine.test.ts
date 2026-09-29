@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { validateLineup } from './lineup'
 import {
   acknowledgeAuctionResult,
   acknowledgeInjuryNotice,
@@ -361,5 +362,28 @@ describe('game commands', () => {
     expect(standings.injuryNoticePending).toBe(true)
     const acknowledged = unwrap(acknowledgeInjuryNotice(standings))
     expect(acknowledged.injuryNoticePending).toBeUndefined()
+  })
+
+  it.each(['G', 'A'] as const)('keeps exactly one keeper when no legal injury replacement exists for %s', (position) => {
+    const state = createNewCareer({ managerName: 'Reserva', seed: 37 })
+    state.phase = 'pre-round'
+    state.market = []
+    const started = unwrap(startRound(state))
+    const club = getManagerClub(started)
+    for (const player of club.players.filter((candidate) => !club.lineup.includes(candidate.id))) {
+      player.injuryRounds = (player.position === 'G') === (position === 'G') ? 4 : 0
+      player.suspensionRounds = 0
+    }
+    const injured = club.players.find((player) => player.position === position && club.lineup.includes(player.id))!
+    expect(validateLineup({ ...club, players: club.players.map((player) => player.id === injured.id
+      ? { ...player, injuryRounds: 3 } : player) })).toBeUndefined()
+    const fixture = started.pendingMatchDay!.matches.find((match) => match.homeId === club.id || match.awayId === club.id)!
+    fixture.events.push({ minute: 40, type: 'injury', clubId: club.id, playerId: injured.id, playerName: injured.name, durationRounds: 3 })
+    const completed = unwrap(finishRound(unwrap(reachHalfTime(started))))
+    const updated = getManagerClub(completed)
+    expect(updated.players.filter((player) => player.position === 'G' && updated.lineup.includes(player.id))).toHaveLength(1)
+    const result = completed.lastReport!.leagueResults.find((match) => match.id === fixture.fixtureId)!.result!
+    expect(result.events.some((event) => event.type === 'substitution' && event.clubId === club.id
+      && event.detail === `entra por ${injured.name} (lesão)`)).toBe(false)
   })
 })
