@@ -1,0 +1,71 @@
+@font-face {
+  font-family: 'IBM VGA8';
+  src: url('/fonts/PxPlus_IBM_VGA8.ttf') format('truetype');
+  font-display: swap;
+}
+
+:root {
+  font-family: 'IBM VGA8', 'Courier New', monospace;
+  color: #ffffff;
+  background: #000000;
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: auto;
+  background: #000000;
+}
+
+button,
+input,
+select {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 1px solid #ffff55;
+  outline-offset: -1px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  color: #555555;
+}
+
+input,
+select {
+  border: 1px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+  padding: 0 3px;
+}

@@ -1,0 +1,2400 @@
+:root {
+  --black: #000000;
+  --blue: #0000aa;
+  --green: #00aa00;
+  --cyan: #00aaaa;
+  --red: #aa0000;
+  --magenta: #aa00aa;
+  --brown: #aa5500;
+  --gray: #aaaaaa;
+  --dark-gray: #555555;
+  --light-blue: #5555ff;
+  --light-green: #55ff55;
+  --light-cyan: #55ffff;
+  --light-red: #ff5555;
+  --yellow: #ffff55;
+  --white: #ffffff;
+}
+
+.dos-viewport {
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  background: #111111;
+}
+
+.dos-stage {
+  position: relative;
+  flex: none;
+}
+
+.dos-screen {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 640px;
+  height: 400px;
+  overflow: hidden;
+  transform-origin: top left;
+  background: var(--black);
+  font-family: 'IBM VGA8', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0;
+  image-rendering: pixelated;
+}
+
+.screen-black { color: var(--white); background: var(--black); }
+.screen-blue { color: var(--white); background: var(--blue); }
+.screen-green { color: var(--black); background: var(--green); }
+.screen-cyan { color: var(--white); background: var(--cyan); }
+.screen-red { color: var(--white); background: var(--red); }
+.screen-gray { color: var(--black); background: var(--gray); }
+
+.storage-warning {
+  position: absolute;
+  z-index: 10;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  padding: 6px;
+  border: 3px double var(--yellow);
+  color: var(--yellow);
+  background: var(--black);
+  line-height: 18px;
+}
+
+.dos-double {
+  border: 3px double currentColor;
+}
+
+.dos-button {
+  border: 1px solid currentColor;
+  padding: 2px 6px;
+  text-align: center;
+}
+
+.action-yellow {
+  color: var(--yellow);
+  background: var(--red);
+}
+
+.screen-heading,
+.panel-title,
+.form-title {
+  color: var(--yellow);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Main shell */
+.game-screen { width: 640px; height: 400px; }
+.status-line { height: 17px; padding: 0 4px; display: flex; justify-content: space-between; color: var(--yellow); }
+.status-line > span:first-child { max-width: 440px; overflow: hidden; white-space: nowrap; }
+.status-line button { margin-left: 9px; color: var(--white); }
+
+/* Manager screen */
+.manager-layout {
+  width: 640px;
+  height: 365px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 372px 256px;
+  grid-template-rows: 304px 49px;
+  gap: 4px;
+}
+
+.squad-panel { padding: 3px 5px; overflow: hidden; }
+.table-row { width: 100%; display: grid; grid-template-columns: 15px 1fr 30px 34px 40px 16px; gap: 2px; min-height: 14px; white-space: nowrap; }
+.player-row { color: var(--white); }
+.player-row.starter { color: var(--black); }
+.player-row.starter > span:first-child { color: var(--yellow); }
+.player-row.selected { color: var(--yellow); background: var(--blue); }
+.player-row:hover { color: var(--yellow); }
+.club-panel { padding: 5px 7px; color: var(--white); }
+.club-title { display: flex; justify-content: space-between; color: var(--black); }
+.tactics-panel { padding: 5px 9px; }
+.tactics-panel .panel-title { color: var(--blue); text-align: left; margin-bottom: 4px; }
+.tactics-panel button { display: block; width: 100%; color: var(--blue); }
+.tactics-panel button.tactic-active { color: var(--yellow); background: var(--blue); }
+.tactics-panel button:hover { color: var(--yellow); }
+
+.next-match { padding: 5px 7px; position: relative; }
+.next-match > div:first-child { display: flex; justify-content: space-between; color: var(--white); }
+.money-panel { padding: 3px 7px; font-size: 12px; line-height: 11px; }
+
+/* Tables */
+.full-screen-panel,
+.scoreboard,
+.cup-screen,
+.finance-screen,
+.stadium-screen,
+.career-screen,
+.news-screen {
+  width: 632px;
+  height: 357px;
+  margin: 4px;
+  overflow: hidden;
+}
+
+.full-screen-panel { padding: 7px; }
+.screen-heading { height: 24px; padding-top: 2px; }
+.division-tabs { height: 28px; display: flex; justify-content: center; gap: 8px; }
+.division-tabs button { padding: 2px 9px; color: var(--white); background: var(--blue); }
+.division-tabs button.active { color: var(--yellow); background: var(--red); }
+.standings-table { border: 1px solid var(--white); }
+.standings-row { height: 31px; display: grid; grid-template-columns: 26px 1fr repeat(8, 38px); align-items: center; padding: 0 7px; color: var(--black); }
+.standings-row:nth-child(odd) { background: var(--gray); }
+.standings-row.head { height: 24px; color: var(--yellow); background: var(--blue); }
+.standings-row.human-row { color: var(--yellow); background: var(--red); }
+.standings-row span:not(:nth-child(2)) { text-align: right; }
+.legend-line { height: 28px; display: flex; align-items: center; justify-content: space-between; color: var(--yellow); }
+
+/* Scores */
+.scoreboard { position: relative; padding: 5px 8px; }
+.scoreboard .screen-heading { color: var(--green); }
+.score-division { display: grid; grid-template-columns: 25px 1fr; min-height: 65px; border-bottom: 1px solid var(--cyan); }
+.division-marker { color: var(--yellow); align-self: center; }
+.score-row { display: grid; grid-template-columns: 145px 42px 145px 1fr; height: 15px; align-items: center; }
+.score-row b { color: var(--yellow); text-align: center; }
+.score-row span:last-child { text-align: right; color: var(--gray); }
+.human-cell { color: var(--yellow) !important; background: var(--red) !important; }
+.score-play { position: absolute; right: 8px; bottom: 5px; width: 224px; }
+
+/* Cup */
+.cup-screen { padding: 5px; }
+.cup-screen .screen-heading { color: var(--blue); }
+.cup-status-line { height: 25px; padding: 3px 5px; display: flex; justify-content: space-between; color: var(--black); font-size: 10px; }
+.cup-bracket { height: 267px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.cup-column { min-width: 0; overflow: hidden; border: 1px solid var(--blue); padding: 2px; }
+.cup-round-title { height: 20px; color: var(--yellow); background: var(--blue); text-align: center; font-size: 11px; }
+.cup-match { margin: 0 0 1px; font-size: 10px; line-height: 7px; }
+.cup-match > div { display: flex; justify-content: space-between; white-space: nowrap; color: var(--white); background: var(--red); }
+.cup-match > div:nth-child(2) { color: var(--black); background: var(--gray); }
+.cup-match .winner { color: var(--yellow); background: var(--blue); }
+.cup-round-waiting { margin-top: 20px; color: var(--blue); font-size: 9px; line-height: 12px; text-align: center; }
+
+/* Market */
+.market-screen { width: 640px; height: 365px; padding: 8px; display: grid; grid-template-columns: 332px 284px; grid-template-rows: 42px 303px; gap: 4px; }
+.auction-title { grid-column: 1 / 3; display: grid; place-items: center; color: var(--yellow); }
+.market-list { padding: 7px; background: var(--blue); }
+.market-head,
+.market-row { display: grid; grid-template-columns: 1fr 28px 34px 45px 48px; gap: 3px; height: 25px; align-items: center; }
+.market-head { color: var(--yellow); border-bottom: 1px solid var(--white); }
+.market-row { width: 100%; color: var(--white); }
+.market-row.active { color: var(--yellow); background: var(--red); }
+.auction-detail { padding: 9px; background: var(--red); }
+.auction-detail > div { height: 17px; }
+.salary-bid { display: flex; justify-content: space-between; margin-top: 15px; color: var(--light-cyan); }
+.salary-bid input { width: 110px; }
+.auction-detail .dos-button { display: block; margin: 12px auto 0; }
+
+/* Finance */
+.finance-screen { padding: 7px; display: flex; flex-direction: column; }
+.finance-screen > :not(.ledger-table) { flex-shrink: 0; }
+.finance-screen .ledger-table { min-height: 0; overflow: auto; }
+.finance-summary { height: 75px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 20px; padding: 5px; border: 1px solid var(--white); }
+.finance-summary > div { display: flex; justify-content: space-between; }
+.finance-summary b { color: var(--yellow); }
+.ticket-control { height: 38px; margin: 4px 0; padding: 6px; display: grid; grid-template-columns: 240px 160px 1fr; gap: 8px; align-items: center; }
+.ticket-control input { width: 55px; }
+.ticket-control button { color: var(--yellow); background: var(--blue); text-align: center; }
+.ticket-control span { font-size: 10px; }
+.ledger-table { border: 1px solid var(--white); }
+.ledger-row { height: 14px; padding: 0 5px; display: grid; grid-template-columns: 55px 1fr 135px; }
+.ledger-row.head { color: var(--yellow); background: var(--blue); }
+.ledger-row span:last-child { text-align: right; }
+.negative { color: var(--light-red) !important; }
+.positive { color: var(--light-green); }
+.empty-ledger { padding: 15px; text-align: center; }
+
+/* Stadium */
+.stadium-screen { position: relative; padding: 7px; }
+.stadium-screen .screen-heading { color: var(--blue); }
+.stadium-ascii { width: 390px; height: 205px; margin: 5px; color: var(--yellow); background: var(--blue); border: 2px solid var(--white); display: grid; place-items: center; }
+.stadium-ascii pre { margin: 0; font: inherit; line-height: 18px; }
+.stadium-data { position: absolute; top: 40px; right: 10px; width: 205px; height: 200px; padding: 13px 9px; }
+.stadium-data > div { height: 39px; }
+.stadium-data b { display: block; color: var(--black); }
+.stadium-supporters { min-height: 24px; padding: 4px 6px; color: var(--yellow); background: var(--blue); }
+.stadium-actions { height: 66px; margin-top: 9px; display: flex; justify-content: space-around; align-items: center; border: 2px solid var(--blue); }
+.stadium-actions button { padding: 7px; color: var(--yellow); background: var(--red); }
+
+/* Career and news */
+.career-screen { padding: 7px; }
+.career-card { height: 112px; padding: 9px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+.career-card b { display: block; color: var(--black); }
+.career-history { height: 149px; margin-top: 5px; padding: 7px; }
+.history-row { display: grid; grid-template-columns: 55px 1fr 65px 35px 120px; }
+.career-objective { height: 40px; margin-top: 5px; padding: 5px; color: var(--yellow); text-align: center; }
+.news-screen { padding: 7px; }
+.telex-paper { height: 286px; padding: 8px 12px; }
+.telex-paper div { height: 16px; overflow: hidden; white-space: nowrap; }
+.telex-paper span { color: var(--red); }
+.telex-footer { height: 28px; display: grid; place-items: center; color: var(--yellow); }
+
+/* Half time */
+
+/* Annual sponsorship offers */
+.sponsorship-screen { width: 640px; height: 400px; padding: 8px; text-align: left; display: flex; flex-direction: column; }
+.sponsorship-title { min-height: 44px; display: grid; place-items: center; color: var(--yellow); text-align: center; }
+.sponsorship-offers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex: 1; gap: 6px; margin-top: 12px; }
+.sponsor-offer { padding: 10px; display: flex; flex-direction: column; min-width: 0; }
+.sponsor-brand { font-size: 24px; line-height: 30px; color: var(--yellow); }
+.sponsor-description { font-size: 10px; line-height: 16px; white-space: nowrap; }
+.sponsor-terms { margin: 28px 0; }
+.sponsor-terms > div { display: flex; justify-content: space-between; align-items: center; gap: 3px; min-height: 32px; }
+.sponsor-terms dt { font-size: 10px; }
+.sponsor-terms dd { margin: 0; font-size: 12px; white-space: nowrap; }
+.sponsor-sign { align-self: stretch; min-height: 32px; margin-top: auto; color: var(--yellow); text-align: center; }
+.sponsor-sign:disabled { opacity: 0.65; }
+.finance-sponsor-contract { font-size: 11px; line-height: 16px; color: var(--yellow); }
+.sponsorship-notice-screen { width: 640px; height: 400px; padding: 28px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.sponsorship-notice-title { padding: 12px; color: var(--yellow); font-size: 20px; line-height: 24px; }
+.sponsorship-notice-message { padding: 24px; margin: 18px 0; line-height: 24px; }
+.sponsorship-notice-continue { color: var(--yellow); }
+
+/* Season end */
+.season-end { width: 640px; height: 400px; padding: 8px; }
+.season-banner { height: 32px; display: grid; place-items: center; color: var(--yellow); }
+.awards-grid { height: 194px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5px; margin-top: 5px; }
+.award-panel { padding: 5px; text-align: left; line-height: 13px; }
+.award-panel .panel-title { margin-bottom: 5px; }
+.award-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 5px; margin-bottom: 3px; }
+.award-row > span { font-size: 10px; }
+.award-winner { grid-column: 1; color: var(--black); }
+.award-amount { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--black); white-space: nowrap; }
+.division-awards { margin-bottom: 3px; }
+.division-awards-title { font-size: 10px; line-height: 10px; }
+.award-row--compact { grid-template-columns: 15px minmax(0, 1fr) auto; margin-bottom: 0; }
+.award-row--compact > span { font-size: inherit; }
+.award-row--compact .award-winner { grid-column: 2; }
+.award-row--compact .award-amount { grid-column: 3; grid-row: 1; }
+.season-manager-status { display: flex; justify-content: space-between; gap: 5px; height: 14px; font-size: 11px; line-height: 14px; color: var(--yellow); }
+.job-offers { height: 96px; margin-top: 5px; padding: 5px; }
+.job-offers .panel-title { margin-bottom: 3px; }
+.job-offers button { width: 100%; height: 22px; display: grid; grid-template-columns: 135px 1fr 100px 65px; color: var(--white); }
+.job-offers button:hover { color: var(--yellow); background: var(--red); }
+.season-actions { height: 30px; display: flex; align-items: flex-end; justify-content: space-between; color: var(--yellow); }
+.season-actions > span { max-width: 300px; }
+
+/* DOS screen layout and browser controls */
+.game-screen {
+  position: relative;
+  width: 640px;
+  height: 400px;
+}
+
+.dos-status-message {
+  position: absolute;
+  right: 5px;
+  bottom: 3px;
+  max-width: 430px;
+  overflow: hidden;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+
+.title-screen {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.title-logo {
+  position: absolute;
+  top: 5px;
+  left: -70px;
+  width: 780px;
+  height: 188px;
+  color: var(--blue);
+  font-size: 155px;
+  line-height: 180px;
+  letter-spacing: -10px;
+  text-align: center;
+  -webkit-text-stroke: 1px var(--white);
+  paint-order: stroke fill;
+  transform: scaleX(1.3);
+}
+
+.continue-question {
+  position: absolute;
+  top: 195px;
+  left: 0;
+  width: 100%;
+  color: var(--yellow);
+  text-align: center;
+}
+
+.continue-question span { color: var(--white); }
+
+.continue-actions {
+  position: absolute;
+  top: 223px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+}
+
+.continue-actions button { color: var(--white); }
+.continue-actions button:hover { color: var(--yellow); }
+
+.title-attribution {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  left: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  color: var(--white);
+  background: var(--black);
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+}
+.title-attribution p { margin: 0; }
+.title-attribution a { color: var(--yellow); text-underline-offset: 2px; }
+.title-attribution a:focus-visible { outline: 1px solid var(--yellow); outline-offset: 2px; }
+.title-attribution .title-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 3px double currentColor;
+  color: var(--gray);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.title-github svg { width: 16px; height: 16px; flex: none; }
+.title-attribution .title-github:hover,
+.title-attribution .title-github:focus-visible { color: var(--yellow); }
+
+.saved-leagues { width: 640px; height: 400px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.saved-leagues p { margin: 0; color: var(--light-cyan); font-size: 12px; }
+.saved-leagues > button { align-self: flex-end; color: var(--yellow); }
+.saved-leagues-list { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.saved-leagues-list button { flex-shrink: 0; padding: 10px; display: grid; gap: 6px; text-align: left; color: var(--white); }
+.saved-leagues-list button:hover { color: var(--yellow); }
+.saved-leagues-list span { font-size: 12px; color: var(--light-cyan); }
+
+.manager-entry-screen {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 12px 8px;
+}
+
+.dos-red-line { border: 2px solid var(--red); }
+
+.manager-entry-head,
+.manager-entry-row,
+.manager-assigned-row {
+  width: 624px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  padding: 4px 9px;
+}
+
+.manager-entry-head {
+  height: 32px;
+  color: var(--yellow);
+  text-align: center;
+}
+
+.manager-entry-row,
+.manager-assigned-row {
+  min-height: 28px;
+  border-top: 0;
+  color: var(--white);
+}
+
+.manager-entry-row input {
+  width: 282px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+}
+
+.manager-entry-row button { color: var(--white); }
+.manager-assigned-row > span:first-child { text-transform: lowercase; }
+.assigned-club {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding-left: 10px;
+}
+.multiplayer-assigned-row.you > span:first-child { color: var(--light-cyan); }
+.multiplayer-assigned-row.drawing > span:first-child { color: var(--yellow); }
+.pending-club { color: var(--gray); background: transparent; }
+.multiplayer-draw-status { min-height: 28px; }
+
+.manager-entry-start {
+  display: block;
+  margin: 16px auto;
+  color: var(--yellow);
+}
+
+.manager-entry-start:hover { color: var(--white); }
+.manager-entry-message { margin: 12px; color: var(--yellow); }
+
+.original-cup-draw {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 6px 4px;
+  color: var(--blue);
+}
+
+.original-cup-title {
+  width: 625px;
+  height: 34px;
+  padding-top: 9px;
+  border: 2px solid var(--blue);
+  text-align: center;
+}
+
+.cup-draw-skip {
+  position: absolute;
+  inset: 54px auto auto 4px;
+  width: 625px;
+  height: 306px;
+  color: inherit;
+}
+
+.cup-drawn-box,
+.cup-pool-box {
+  width: 625px;
+  border: 2px solid var(--blue);
+}
+
+.cup-drawn-box { height: 158px; padding: 10px; overflow: hidden; }
+.cup-pool-box { height: 136px; margin-top: 12px; padding: 7px 10px; overflow: hidden; }
+
+.cup-pairs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 112px);
+  gap: 2px 32px;
+}
+
+.cup-pair { min-height: 32px; }
+.cup-pair .dos-team-name { display: block; }
+
+.cup-pool-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 112px);
+  grid-auto-rows: 16px;
+  column-gap: 32px;
+}
+
+.dos-team-name {
+  display: inline-block;
+  min-width: 112px;
+  height: 16px;
+  padding: 1px 3px;
+  overflow: hidden;
+  color: var(--team-fg);
+  background: var(--team-bg);
+  white-space: nowrap;
+}
+
+.original-auction {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 16px 8px;
+}
+
+.original-auction-title {
+  width: 624px;
+  height: 48px;
+  padding-top: 14px;
+  border: 6px double var(--yellow);
+  color: var(--yellow);
+  background: var(--red);
+  text-align: center;
+}
+
+.original-auction-detail {
+  width: 624px;
+  height: 144px;
+  margin-top: 16px;
+  padding: 11px 9px;
+  border: 6px double var(--white);
+  color: var(--white);
+  background: var(--red);
+}
+
+.original-auction-detail > div { height: 16px; }
+.original-auction-detail span { color: inherit; }
+.original-auction-detail .auction-minimum { margin-top: 12px; }
+
+.auction-prompt {
+  position: absolute;
+  left: 8px;
+  bottom: 48px;
+  width: 624px;
+  height: 48px;
+  padding: 12px 10px;
+  border: 6px double var(--white);
+  color: inherit;
+  background: var(--cyan);
+}
+
+.auction-prompt label { display: inline-flex; }
+.auction-prompt input {
+  width: 125px;
+  height: 16px;
+  padding: 0 4px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.auction-prompt button { color: inherit; }
+.auction-prompt--blocked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.auction-result {
+  position: absolute;
+  left: 8px;
+  bottom: 16px;
+  width: 624px;
+  min-height: 65px;
+  padding: 8px 12px;
+  border: 6px double var(--white);
+  color: var(--yellow);
+  background: var(--cyan);
+}
+
+.auction-result span { display: block; text-align: center; }
+.auction-cash { position: absolute; left: 15px; bottom: 26px; color: var(--white); }
+.auction-message { position: absolute; left: 15px; bottom: 2px; color: var(--yellow); }
+
+.original-manager-layout {
+  width: 640px;
+  height: 400px;
+  padding: 5px 4px 8px;
+  display: grid;
+  grid-template-columns: 369px 249px;
+  grid-template-rows: 84px 210px 57px;
+  gap: 14px 8px;
+}
+
+.original-squad-panel,
+.original-club-panel,
+.original-tactics-panel,
+.original-next-match,
+.original-money-panel {
+  border: 6px double var(--white);
+}
+
+.original-squad-panel {
+  grid-row: 1 / 3;
+  padding: 7px 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: currentColor transparent;
+  scrollbar-width: thin;
+}
+
+.original-squad-panel::-webkit-scrollbar { width: 8px; }
+.original-squad-panel::-webkit-scrollbar-track { background: transparent; }
+.original-squad-panel::-webkit-scrollbar-thumb { background: currentColor; }
+
+.original-player-row {
+  width: 100%;
+  height: 16px;
+  display: grid;
+  grid-template-columns: 16px 1fr 34px 32px 63px 28px;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.original-player-row span:nth-child(n + 3) { text-align: right; }
+.original-player-row:hover,
+.original-player-row.selected { color: var(--yellow); background: var(--blue); }
+.original-player-row.starter > span:first-child { color: inherit; }
+
+.original-player-row.sale-player-row {
+  grid-template-columns: 32px minmax(0, 1fr) 36px 92px;
+  column-gap: 4px;
+}
+
+.sale-player-row span:nth-child(n + 3) { text-align: right; }
+.sale-player-header {
+  position: sticky;
+  top: -7px;
+  z-index: 1;
+  height: 18px;
+  padding-top: 1px;
+  border-bottom: 1px solid currentColor;
+}
+
+.original-club-panel {
+  padding: 7px 8px 5px;
+  line-height: 16px;
+}
+
+.original-club-title,
+.original-club-data,
+.original-next-match > div:first-child {
+  display: flex;
+  justify-content: space-between;
+}
+
+.original-tactics-panel {
+  padding: 8px 8px 5px;
+  color: var(--blue);
+}
+
+.original-panel-title {
+  display: grid;
+  grid-template-columns: 22px 1fr 22px;
+  margin-bottom: 14px;
+}
+
+.original-panel-title span { text-align: left; }
+.original-panel-title button { color: var(--blue); text-align: center; }
+.original-tactic-list button {
+  display: block;
+  width: 100%;
+  height: 16px;
+  color: var(--blue);
+}
+
+.original-tactic-list button:hover,
+.original-tactic-list button:focus-visible { color: var(--yellow); background: var(--blue); }
+
+.original-command-list button {
+  display: block;
+  width: 100%;
+  height: 27px;
+  color: var(--blue);
+}
+
+.original-command-list button:hover,
+.original-command-list button:focus-visible { color: var(--yellow); background: var(--blue); }
+
+.sale-mode-panel { position: relative; height: 190px; }
+.sale-mode-title { height: 29px; text-align: center; }
+.sale-mode-detail > div { min-height: 22px; }
+.sale-mode-detail > div span { display: block; height: 12px; font-size: 10px; }
+.sale-mode-detail > div b { display: block; color: var(--yellow); font-weight: inherit; }
+.renew-mode-detail label { display: flex; justify-content: space-between; margin-top: 5px; font-size: 10px; }
+.renew-mode-detail input { width: 94px; height: 17px; padding: 0 3px; border: 1px solid var(--blue); color: var(--yellow); background: var(--black); font: inherit; }
+.sale-mode-instruction { padding: 12px 4px; line-height: 18px; white-space: pre-line; }
+.sale-confirm { display: block; margin: 8px auto 0; color: var(--yellow); }
+.sale-cancel { position: absolute; right: 0; bottom: 0; color: var(--blue); }
+
+.original-next-match {
+  padding: 2px 8px;
+  color: inherit;
+  line-height: 14px;
+}
+
+.original-money-panel {
+  padding: 2px 8px;
+  color: inherit;
+  line-height: 14px;
+}
+
+.browser-back-command {
+  position: absolute;
+  right: 10px;
+  bottom: 7px;
+  z-index: 2;
+  padding: 1px 4px;
+  color: var(--yellow);
+  background: var(--red);
+}
+
+.original-matchday {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 23px 11px 24px;
+}
+
+.matchday-title {
+  position: absolute;
+  top: 33px;
+  left: 0;
+  width: 100%;
+  color: var(--green);
+  text-align: center;
+}
+
+.matchday-board {
+  width: 618px;
+  height: 353px;
+  padding: 39px 3px 5px;
+  border: 2px solid var(--green);
+}
+
+.matchday-division {
+  height: 80px;
+  padding: 2px 0;
+  border-bottom: 2px solid var(--green);
+}
+
+.matchday-division:last-child { border-bottom: 0; }
+.matchday-row {
+  height: 16px;
+  display: grid;
+  grid-template-columns: 112px 35px 112px 35px 67px 160px minmax(0, 1fr);
+  column-gap: 4px;
+  align-items: center;
+}
+
+.matchday-row > b { color: var(--white); text-align: center; }
+.matchday-goal-slot { grid-column: 6; min-width: 0; height: 16px; overflow: hidden; }
+.matchday-attendance { grid-column: 7; text-align: right; }
+
+.goal-flash {
+  width: 100%;
+  height: 16px;
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 3px;
+}
+
+.injury-flash { font-weight: bold; }
+
+.matchday-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 640px;
+  height: 16px;
+  background: var(--white);
+}
+
+.matchday-progress > span { display: block; height: 100%; background: var(--yellow); }
+
+.original-halftime {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 15px 12px;
+}
+
+.halftime-scoreline {
+  height: 45px;
+  display: grid;
+  grid-template-columns: 180px 70px 180px;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--green);
+}
+
+.halftime-scoreline b { color: var(--yellow); text-align: center; }
+.halftime-lineups { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+.halftime-list { height: 264px; padding: 8px; border: 6px double currentColor; background: inherit; }
+.halftime-list-title { height: 29px; color: inherit; text-align: center; }
+.halftime-list button {
+  width: 100%;
+  height: 18px;
+  display: grid;
+  grid-template-columns: 20px 1fr 34px;
+  color: inherit;
+}
+
+.halftime-list button.selected { outline: 1px solid currentColor; outline-offset: -1px; }
+.halftime-list button span:nth-child(2) { min-width: 0; overflow: hidden; white-space: nowrap; }
+.halftime-list button span:last-child { text-align: right; }
+.halftime-commands { position: absolute; left: 28px; right: 28px; bottom: 17px; display: flex; justify-content: space-between; }
+.halftime-commands button { color: var(--yellow); }
+.halftime-message { position: absolute; bottom: 2px; left: 12px; color: var(--white); }
+
+.original-standings {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 7px 8px;
+  color: var(--white);
+}
+
+.standings-title { height: 28px; color: var(--yellow); text-align: center; }
+.standings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+.division-table { height: 174px; padding: 4px; border: 2px solid var(--cyan); }
+.division-title { height: 20px; color: var(--green); text-align: center; }
+.original-standing-row { height: 17px; display: grid; grid-template-columns: 112px repeat(3, 22px) 48px 28px; column-gap: 2px; }
+.original-standing-row > span:not(.dos-team-name) { text-align: right; }
+
+.injury-screen {
+  width: 640px;
+  height: 400px;
+  padding: 18px 24px;
+  color: var(--white);
+  text-align: left;
+}
+.injury-screen-title { padding: 10px; color: var(--white); text-align: center; }
+.injury-screen-list { min-height: 230px; margin-top: 18px; padding: 20px; color: var(--yellow); }
+.injury-screen-list > div { min-height: 28px; padding: 5px 0; }
+.injury-screen-note { margin-top: 12px; color: var(--light-cyan); text-align: center; }
+.injury-screen-continue { margin-top: 13px; color: var(--yellow); text-align: center; }
+
+/* Multiplayer layout: a 260px communication terminal beside the 640x400 game. */
+
+.multiplayer-shell {
+  width: 900px;
+  height: 400px;
+  display: grid;
+  grid-template-columns: 640px 260px;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.multiplayer-game-pane {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  overflow: hidden;
+}
+
+.multiplayer-entry {
+  position: relative;
+  width: 900px;
+  height: 400px;
+  padding: 12px 18px;
+}
+
+.multiplayer-entry-title,
+.multiplayer-lobby-title {
+  height: 32px;
+  padding: 8px;
+  color: var(--yellow);
+  text-align: center;
+}
+
+.multiplayer-entry-menu {
+  position: absolute;
+  top: 84px;
+  left: 180px;
+  width: 540px;
+  display: grid;
+  gap: 18px;
+}
+
+.multiplayer-entry-menu button {
+  height: 58px;
+  padding: 19px;
+  border: 3px double var(--white);
+  color: var(--white);
+  background: var(--red);
+  text-align: center;
+}
+
+.multiplayer-entry-menu button:hover,
+.multiplayer-entry-form button:hover,
+.multiplayer-lobby-actions button:hover { color: var(--yellow); }
+
+.multiplayer-entry-form {
+  position: absolute;
+  top: 78px;
+  left: 180px;
+  width: 540px;
+  min-height: 214px;
+  padding: 18px 22px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  color: var(--light-cyan);
+}
+
+.multiplayer-entry-form-title { color: var(--yellow); text-align: center; }
+.multiplayer-entry-form label { display: grid; grid-template-columns: 205px 1fr; align-items: center; }
+.multiplayer-entry-form input { width: 100%; color: var(--yellow); }
+.multiplayer-entry-form input[aria-label='Código da sala'] {
+  width: 120px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.multiplayer-entry-form button {
+  justify-self: center;
+  width: 230px;
+  height: 38px;
+  border: 3px double var(--white);
+  color: var(--white);
+  background: var(--red);
+  text-align: center;
+}
+.multiplayer-entry-message { position: absolute; bottom: 48px; left: 20px; right: 20px; color: var(--yellow); text-align: center; }
+.multiplayer-exit { position: absolute; right: 20px; bottom: 14px; color: var(--white); }
+
+.multiplayer-lobby {
+  position: relative;
+  width: 640px;
+  height: 400px;
+  padding: 8px;
+}
+
+.multiplayer-lobby-status { height: 28px; padding-top: 8px; color: var(--yellow); text-align: center; }
+.multiplayer-seats { height: 164px; padding: 5px 8px; }
+.multiplayer-seats > div {
+  height: 18px;
+  display: grid;
+  grid-template-columns: 25px 1fr 110px;
+  color: var(--dark-gray);
+}
+.multiplayer-seats > div.occupied { color: var(--white); }
+.multiplayer-seats > div.occupied > span:last-child { color: var(--light-green); }
+.multiplayer-share,
+.multiplayer-open-wait {
+  height: 82px;
+  margin-top: 8px;
+  padding: 7px 10px;
+  color: var(--black);
+}
+.multiplayer-share { display: grid; grid-template-columns: 1fr 135px; grid-template-rows: 17px 24px 17px; gap: 2px 8px; }
+.multiplayer-share input { grid-column: 1; width: 100%; color: var(--white); background: var(--black); }
+.multiplayer-share button { grid-column: 2; grid-row: 2; color: var(--black); text-align: right; }
+.multiplayer-share span { grid-column: 1 / -1; color: var(--blue); }
+.multiplayer-open-wait { padding: 22px 30px; text-align: center; line-height: 17px; }
+.multiplayer-lobby-actions { height: 34px; display: flex; align-items: center; justify-content: space-between; color: var(--yellow); }
+.multiplayer-lobby-actions button:last-child { color: var(--white); }
+.multiplayer-lobby-message { height: 18px; overflow: hidden; color: var(--light-cyan); text-align: center; white-space: nowrap; }
+
+.multiplayer-chat {
+  width: 260px;
+  height: 400px;
+  display: grid;
+  grid-template-rows: 30px auto 1fr 42px;
+  border-left: 4px double var(--gray);
+  overflow: hidden;
+}
+
+.multiplayer-chat.has-action-timer { grid-template-rows: 30px 38px auto 1fr 42px; }
+.multiplayer-chat.has-league-controls { grid-template-rows: 30px auto auto minmax(0, 1fr) 42px; }
+.multiplayer-chat.has-league-controls.has-action-timer { grid-template-rows: 30px auto 38px auto minmax(0, 1fr) 42px; }
+.multiplayer-league-controls { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; border-bottom: 1px solid var(--gray); }
+.multiplayer-league-controls button { padding: 5px; border: 1px solid currentColor; color: var(--yellow); font-size: 12px; }
+.multiplayer-league-controls span { color: var(--yellow); font-size: 12px; line-height: 16px; }
+.multiplayer-pause { position: absolute; inset: 75px 25px; z-index: 10; padding: 30px 16px; text-align: center; color: var(--yellow); }
+.multiplayer-pause strong { display: block; line-height: 24px; }
+.multiplayer-pause p { font-size: 13px; line-height: 20px; color: var(--white); }
+
+.multiplayer-room-head {
+  padding: 8px 6px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--yellow);
+}
+
+.multiplayer-chat-toggle { display: none; }
+
+.multiplayer-timer {
+  padding: 5px 7px;
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  align-items: center;
+  border-bottom: 1px solid var(--cyan);
+  color: var(--light-cyan);
+  line-height: 14px;
+}
+.multiplayer-timer b { color: var(--yellow); font-size: 24px; line-height: 26px; text-align: right; }
+.multiplayer-timer.actionable { animation: multiplayer-timer-blink 900ms steps(1, end) infinite; }
+.multiplayer-timer.urgent { color: var(--yellow); background: var(--red); }
+.multiplayer-timer.urgent b { color: var(--white); }
+
+@keyframes multiplayer-timer-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.28; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .multiplayer-timer.actionable { animation: none; }
+}
+
+.multiplayer-player-strip {
+  max-height: 93px;
+  padding: 4px 5px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--gray);
+  font-size: 12px;
+  line-height: 12px;
+}
+.multiplayer-player-strip > div { display: grid; grid-template-columns: 12px 1fr 82px; color: var(--gray); }
+.multiplayer-player-strip > div.you { color: var(--yellow); }
+.multiplayer-player-strip > div.offline { color: var(--dark-gray); }
+.multiplayer-player-strip span:last-child { text-align: right; }
+.multiplayer-player-club {
+  min-width: 0;
+  padding: 0 2px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.multiplayer-chat-log {
+  min-height: 0;
+  padding: 5px 6px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  color: var(--gray);
+  font-size: 12px;
+  line-height: 14px;
+}
+.multiplayer-chat-log > div { margin-bottom: 4px; }
+.multiplayer-chat-log b { color: var(--light-cyan); }
+.multiplayer-chat-log .mine { color: var(--white); }
+.multiplayer-chat-log .mine b { color: var(--yellow); }
+.multiplayer-chat-log .system { color: var(--light-green); }
+
+.multiplayer-chat-form {
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  gap: 3px;
+  border-top: 3px double var(--gray);
+}
+.multiplayer-chat-form input { width: 100%; color: var(--white); }
+.multiplayer-chat-form button { color: var(--yellow); font-size: 11px; text-align: center; }
+
+.multiplayer-season-end {
+  width: 640px;
+  height: 400px;
+  padding: 18px 12px;
+  text-align: center;
+  line-height: 28px;
+}
+.multiplayer-season-end button { position: absolute; bottom: 20px; right: 20px; color: var(--yellow); }
+.multiplayer-season-end .season-continue { right: auto; left: 20px; }
+
+@media (pointer: coarse) {
+  .original-player-row,
+  .original-tactic-list button,
+  .halftime-list button { min-height: 18px; }
+}
+
+/* Responsive layout. Desktop and landscape retain the fixed
+   640x400 canvas; narrow portrait screens reflow the same DOS panels. */
+.dos-viewport--portrait {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--black);
+  overscroll-behavior: contain;
+}
+
+.dos-viewport--portrait .dos-stage {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.dos-viewport--portrait .dos-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  transform: none;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.dos-viewport--portrait button,
+.dos-viewport--portrait input,
+.dos-viewport--portrait select {
+  touch-action: manipulation;
+}
+
+.dos-viewport--portrait input,
+.dos-viewport--portrait select {
+  min-height: 42px;
+  font-size: 16px;
+}
+
+.dos-viewport--portrait .title-screen,
+.dos-viewport--portrait .manager-entry-screen,
+.dos-viewport--portrait .game-screen,
+.dos-viewport--portrait .original-cup-draw,
+.dos-viewport--portrait .original-auction,
+.dos-viewport--portrait .original-matchday,
+.dos-viewport--portrait .original-halftime,
+.dos-viewport--portrait .original-standings,
+.dos-viewport--portrait .season-end,
+.dos-viewport--portrait .multiplayer-entry,
+.dos-viewport--portrait .multiplayer-lobby,
+.dos-viewport--portrait .multiplayer-season-end {
+  width: 100%;
+  min-height: 100dvh;
+  height: auto;
+}
+
+/* Title and manager registration */
+.dos-viewport--portrait .title-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+}
+
+.dos-viewport--portrait .title-logo {
+  top: max(36px, 8dvh);
+  left: -4%;
+  width: 108%;
+  height: auto;
+  font-size: clamp(70px, 24vw, 106px);
+  line-height: 1;
+  letter-spacing: -5px;
+  transform: scaleX(1.08);
+}
+
+.dos-viewport--portrait .continue-question {
+  top: 34dvh;
+  padding: 0 16px;
+  line-height: 22px;
+}
+
+.dos-viewport--portrait .continue-actions {
+  position: relative;
+  top: auto;
+  margin-top: 41dvh;
+  padding: 0 34px;
+  gap: 8px;
+}
+
+.dos-viewport--portrait .title-attribution {
+  position: static;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 10px;
+  margin: auto 4% 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.dos-viewport--portrait .title-attribution p + p { margin-top: 6px; }
+.dos-viewport--portrait .title-attribution a { display: inline-block; padding: 2px 0; }
+.dos-viewport--portrait .title-attribution .title-github { display: inline-flex; min-height: 44px; padding: 6px 10px; }
+
+.dos-viewport--portrait .continue-actions button,
+.dos-viewport--portrait .manager-entry-start {
+  width: 100%;
+  min-height: 48px;
+  border: 3px double currentColor;
+  text-align: center;
+}
+
+.dos-viewport--portrait .manager-entry-screen {
+  padding: max(20px, 8dvh) 10px 20px;
+}
+
+.dos-viewport--portrait .manager-entry-head,
+.dos-viewport--portrait .manager-entry-row,
+.dos-viewport--portrait .manager-assigned-row {
+  width: 100%;
+  min-height: 52px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+}
+
+.dos-viewport--portrait .manager-entry-row input {
+  width: 100%;
+  height: 42px;
+  padding: 0 6px;
+  border: 1px solid var(--white);
+}
+
+.dos-viewport--portrait .manager-entry-row button {
+  min-height: 44px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .manager-entry-start {
+  margin-top: 24px;
+}
+
+/* Main manager screen */
+.dos-viewport--portrait .original-manager-layout {
+  width: 100%;
+  height: auto;
+  min-height: 100dvh;
+  padding: 6px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas:
+    "club"
+    "next"
+    "squad"
+    "tactics"
+    "money";
+  gap: 6px;
+}
+
+.dos-viewport--portrait .original-club-panel {
+  grid-area: club;
+  min-height: 102px;
+  padding: 9px 10px;
+  line-height: 20px;
+}
+
+.dos-viewport--portrait .original-next-match {
+  grid-area: next;
+  min-height: 76px;
+  padding: 7px 10px;
+  line-height: 20px;
+}
+
+.dos-viewport--portrait .original-squad-panel {
+  grid-area: squad;
+  width: 100%;
+  height: min(54dvh, 510px);
+  min-height: 360px;
+  padding: 6px;
+}
+
+.dos-viewport--portrait .original-player-row {
+  min-height: 40px;
+  height: 40px;
+  grid-template-columns: 20px minmax(0, 1fr) 32px 28px 58px 28px;
+  align-items: center;
+  column-gap: 2px;
+}
+
+.dos-viewport--portrait .original-player-row.sale-player-row {
+  grid-template-columns: 34px minmax(0, 1fr) 42px 94px;
+}
+
+.dos-viewport--portrait .sale-player-header {
+  top: -6px;
+  min-height: 34px;
+  height: 34px;
+}
+
+.dos-viewport--portrait .original-tactics-panel {
+  grid-area: tactics;
+  min-height: 210px;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .original-panel-title {
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.dos-viewport--portrait .original-panel-title button,
+.dos-viewport--portrait .original-tactic-list button,
+.dos-viewport--portrait .original-command-list button,
+.dos-viewport--portrait .sale-confirm,
+.dos-viewport--portrait .sale-cancel {
+  min-height: 44px;
+  padding: 7px;
+}
+
+.dos-viewport--portrait .original-tactic-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 8px;
+}
+
+.dos-viewport--portrait .original-tactic-list button,
+.dos-viewport--portrait .original-command-list button {
+  height: auto;
+}
+
+.dos-viewport--portrait .sale-mode-panel {
+  min-height: 310px;
+  height: auto;
+}
+
+.dos-viewport--portrait .sale-mode-title {
+  height: 36px;
+}
+
+.dos-viewport--portrait .sale-mode-detail > div {
+  min-height: 44px;
+}
+
+.dos-viewport--portrait .renew-mode-detail label {
+  min-height: 50px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.dos-viewport--portrait .renew-mode-detail input {
+  width: 120px;
+  height: 42px;
+}
+
+.dos-viewport--portrait .sale-cancel {
+  right: 0;
+  bottom: 0;
+}
+
+.dos-viewport--portrait .original-money-panel {
+  grid-area: money;
+  min-height: 78px;
+  padding: 7px 10px;
+  line-height: 20px;
+}
+
+/* Secondary manager screens */
+.dos-viewport--portrait .full-screen-panel,
+.dos-viewport--portrait .scoreboard,
+.dos-viewport--portrait .cup-screen,
+.dos-viewport--portrait .finance-screen,
+.dos-viewport--portrait .stadium-screen,
+.dos-viewport--portrait .career-screen,
+.dos-viewport--portrait .news-screen {
+  width: calc(100% - 8px);
+  height: auto;
+  min-height: calc(100dvh - 56px);
+  margin: 4px;
+  overflow: visible;
+}
+
+.dos-viewport--portrait .screen-heading {
+  min-height: 44px;
+  height: auto;
+  padding: 12px 4px 6px;
+  line-height: 18px;
+}
+
+.dos-viewport--portrait .browser-back-command {
+  position: sticky;
+  right: auto;
+  bottom: 0;
+  z-index: 8;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border-top: 3px double var(--yellow);
+  text-align: center;
+}
+
+.dos-viewport--portrait .dos-status-message {
+  position: static;
+  width: 100%;
+  max-width: none;
+  min-height: 32px;
+  padding: 7px;
+  white-space: normal;
+}
+
+.dos-viewport--portrait .division-tabs {
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.dos-viewport--portrait .division-tabs button {
+  min-height: 44px;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .standings-table {
+  overflow-x: auto;
+}
+
+.dos-viewport--portrait .standings-row {
+  width: 100%;
+  min-width: 360px;
+  height: 44px;
+  grid-template-columns: 20px minmax(92px, 1fr) repeat(8, 26px);
+  column-gap: 2px;
+  padding: 0 4px;
+  font-size: 11px;
+}
+
+.dos-viewport--portrait .standings-row span:first-child {
+  text-align: center;
+}
+
+.dos-viewport--portrait .standings-row.head {
+  height: 36px;
+}
+
+.dos-viewport--portrait .legend-line {
+  height: auto;
+  min-height: 60px;
+  padding: 8px 3px;
+  flex-wrap: wrap;
+  gap: 8px;
+  line-height: 18px;
+}
+
+.dos-viewport--portrait .scoreboard {
+  padding: 5px;
+}
+
+.dos-viewport--portrait .score-division {
+  grid-template-columns: 34px minmax(0, 1fr);
+  min-height: 0;
+}
+
+.dos-viewport--portrait .score-row {
+  min-height: 58px;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+  grid-template-rows: 34px 20px;
+  column-gap: 3px;
+}
+
+.dos-viewport--portrait .score-row span:last-child {
+  grid-column: 1 / -1;
+  padding-right: 4px;
+}
+
+.dos-viewport--portrait .score-play {
+  position: sticky;
+  right: auto;
+  bottom: 0;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 6px;
+}
+
+.dos-viewport--portrait .cup-status-line {
+  height: auto;
+  min-height: 54px;
+  padding: 7px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.dos-viewport--portrait .cup-bracket {
+  width: 100%;
+  height: 430px;
+  grid-template-columns: repeat(5, 150px);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: var(--blue) transparent;
+}
+
+.dos-viewport--portrait .cup-column {
+  overflow-y: auto;
+}
+
+.dos-viewport--portrait .cup-round-title {
+  height: 32px;
+  padding-top: 7px;
+}
+
+.dos-viewport--portrait .cup-match {
+  margin-bottom: 3px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.dos-viewport--portrait .market-screen {
+  width: 100%;
+  height: auto;
+  min-height: calc(100dvh - 48px);
+  padding: 6px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(330px, 48dvh) auto;
+  gap: 6px;
+}
+
+.dos-viewport--portrait .auction-title {
+  grid-column: 1;
+  min-height: 54px;
+  padding: 8px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .market-list {
+  overflow-y: auto;
+}
+
+.dos-viewport--portrait .market-head,
+.dos-viewport--portrait .market-row {
+  min-height: 42px;
+  height: 42px;
+  grid-template-columns: minmax(0, 1fr) 28px 30px 44px 44px;
+  font-size: 11px;
+}
+
+.dos-viewport--portrait .auction-detail {
+  min-height: 310px;
+  padding: 12px;
+}
+
+.dos-viewport--portrait .auction-detail > div {
+  min-height: 28px;
+}
+
+.dos-viewport--portrait .salary-bid {
+  min-height: 50px;
+  align-items: center;
+}
+
+.dos-viewport--portrait .salary-bid input {
+  width: 128px;
+}
+
+.dos-viewport--portrait .auction-detail .dos-button {
+  width: 100%;
+  min-height: 48px;
+}
+
+.dos-viewport--portrait .finance-summary {
+  height: auto;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 9px;
+}
+
+.dos-viewport--portrait .finance-summary > div {
+  min-height: 32px;
+  gap: 12px;
+}
+
+.dos-viewport--portrait .ticket-control {
+  height: auto;
+  min-height: 158px;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .ticket-control input {
+  width: 90px;
+}
+
+.dos-viewport--portrait .ticket-control button {
+  min-height: 44px;
+}
+
+.dos-viewport--portrait .ledger-table {
+  overflow-x: auto;
+}
+
+.dos-viewport--portrait .ledger-row {
+  min-width: 360px;
+  min-height: 36px;
+  height: 36px;
+  grid-template-columns: 44px minmax(0, 1fr) 92px;
+  align-items: center;
+  font-size: 11px;
+}
+
+.dos-viewport--portrait .stadium-ascii {
+  width: 100%;
+  height: auto;
+  min-height: 190px;
+  margin: 4px 0;
+  overflow: hidden;
+}
+
+.dos-viewport--portrait .stadium-ascii pre {
+  font-size: clamp(8px, 2.5vw, 11px);
+  line-height: 16px;
+}
+
+.dos-viewport--portrait .stadium-data {
+  position: static;
+  width: 100%;
+  height: auto;
+  padding: 10px;
+}
+
+.dos-viewport--portrait .stadium-data > div {
+  min-height: 48px;
+}
+
+.dos-viewport--portrait .stadium-actions {
+  height: auto;
+  min-height: 170px;
+  margin-top: 6px;
+  padding: 6px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dos-viewport--portrait .stadium-actions button {
+  width: 100%;
+  min-height: 48px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .career-card {
+  height: auto;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.dos-viewport--portrait .career-card > div {
+  min-height: 42px;
+}
+
+.dos-viewport--portrait .career-history {
+  height: auto;
+  min-height: 170px;
+}
+
+.dos-viewport--portrait .history-row {
+  min-height: 46px;
+  grid-template-columns: 38px minmax(0, 1fr) 52px 30px;
+  gap: 3px;
+  align-items: center;
+  font-size: 11px;
+}
+
+.dos-viewport--portrait .history-row span:last-child {
+  grid-column: 1 / -1;
+}
+
+.dos-viewport--portrait .career-objective {
+  height: auto;
+  min-height: 64px;
+  padding: 10px;
+}
+
+.dos-viewport--portrait .telex-paper {
+  height: auto;
+  min-height: 70dvh;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .telex-paper div {
+  height: auto;
+  min-height: 36px;
+  white-space: normal;
+}
+
+/* Draw, auction, matchday, half-time and standings */
+.dos-viewport--portrait .original-cup-draw {
+  padding: 6px;
+  overflow: visible;
+}
+
+.dos-viewport--portrait .original-cup-title {
+  width: 100%;
+  min-height: 50px;
+  height: auto;
+  padding: 13px 6px 8px;
+  line-height: 18px;
+}
+
+.dos-viewport--portrait .cup-draw-skip {
+  position: static;
+  width: 100%;
+  height: auto;
+  min-height: calc(100dvh - 62px);
+  margin-top: 6px;
+}
+
+.dos-viewport--portrait .cup-drawn-box,
+.dos-viewport--portrait .cup-pool-box {
+  width: 100%;
+  height: auto;
+  min-height: 260px;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .cup-pool-box {
+  margin-top: 6px;
+}
+
+.dos-viewport--portrait .cup-pairs-grid,
+.dos-viewport--portrait .cup-pool-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  gap: 6px;
+}
+
+.dos-viewport--portrait .cup-pair {
+  min-height: 58px;
+}
+
+.dos-viewport--portrait .dos-team-name {
+  min-width: 0;
+  max-width: 100%;
+  height: 26px;
+  padding: 5px 4px;
+}
+
+.dos-viewport--portrait .original-auction {
+  padding: 8px 6px;
+}
+
+.dos-viewport--portrait .original-auction-title,
+.dos-viewport--portrait .original-auction-detail,
+.dos-viewport--portrait .auction-prompt,
+.dos-viewport--portrait .auction-result {
+  width: 100%;
+}
+
+.dos-viewport--portrait .original-auction-title {
+  min-height: 72px;
+  height: auto;
+  padding: 18px 8px 10px;
+}
+
+.dos-viewport--portrait .original-auction-detail {
+  min-height: 220px;
+  height: auto;
+  margin-top: 8px;
+  padding: 13px 10px;
+}
+
+.dos-viewport--portrait .original-auction-detail > div {
+  min-height: 28px;
+  height: auto;
+}
+
+.dos-viewport--portrait .auction-prompt,
+.dos-viewport--portrait .auction-result {
+  position: static;
+  min-height: 100px;
+  height: auto;
+  margin-top: 12px;
+  padding: 16px 10px;
+}
+
+.dos-viewport--portrait .auction-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dos-viewport--portrait .auction-prompt label {
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+}
+
+.dos-viewport--portrait .auction-prompt input {
+  width: min(150px, 45vw);
+  height: 42px;
+  border: 1px solid currentColor;
+}
+
+.dos-viewport--portrait .auction-prompt button {
+  width: 44px;
+  min-height: 44px;
+  text-align: center;
+}
+
+
+.dos-viewport--portrait .auction-cash,
+.dos-viewport--portrait .auction-message {
+  position: static;
+  min-height: 36px;
+  padding: 7px;
+}
+
+.dos-viewport--portrait .original-matchday {
+  padding: 6px 6px 54px;
+}
+
+.dos-viewport--portrait .matchday-title {
+  position: static;
+  min-height: 46px;
+  padding: 14px 4px 7px;
+}
+
+.dos-viewport--portrait .matchday-board {
+  width: 100%;
+  height: auto;
+  padding: 4px;
+}
+
+.dos-viewport--portrait .matchday-division {
+  height: auto;
+  padding: 4px 0;
+}
+
+.dos-viewport--portrait .matchday-row {
+  min-height: 62px;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px;
+  grid-template-rows: 32px 26px;
+  column-gap: 3px;
+  align-items: center;
+}
+
+.dos-viewport--portrait .matchday-goal-slot {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  height: 24px;
+}
+
+.dos-viewport--portrait .matchday-attendance {
+  grid-column: 4;
+  grid-row: 2;
+  font-size: 10px;
+}
+
+.dos-viewport--portrait .goal-flash {
+  height: 24px;
+  padding: 4px;
+}
+
+.dos-viewport--portrait .matchday-progress {
+  position: fixed;
+  z-index: 7;
+  width: 100%;
+  height: 44px;
+}
+
+.dos-viewport--portrait .original-halftime {
+  padding: 6px 6px 58px;
+}
+
+.dos-viewport--portrait .halftime-scoreline {
+  min-height: 74px;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
+  padding: 6px;
+}
+
+.dos-viewport--portrait .halftime-lineups {
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.dos-viewport--portrait .halftime-list {
+  height: auto;
+  min-height: 300px;
+  padding: 7px;
+}
+
+.dos-viewport--portrait .halftime-list-title {
+  height: 38px;
+  padding-top: 7px;
+}
+
+.dos-viewport--portrait .halftime-list button {
+  min-height: 42px;
+  height: 42px;
+  align-items: center;
+}
+
+.dos-viewport--portrait .halftime-commands {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
+  min-height: 52px;
+  padding: 4px 6px;
+  background: var(--blue);
+  border-top: 3px double var(--yellow);
+  gap: 6px;
+}
+
+.dos-viewport--portrait .halftime-commands button {
+  flex: 1;
+  min-height: 44px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .halftime-message {
+  position: static;
+  min-height: 38px;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .original-standings {
+  padding: 6px;
+}
+
+.dos-viewport--portrait .standings-title {
+  min-height: 48px;
+  height: auto;
+  padding: 14px 4px 8px;
+}
+
+.dos-viewport--portrait .standings-grid {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.dos-viewport--portrait .division-table {
+  height: auto;
+  min-height: 356px;
+  padding: 6px;
+}
+
+.dos-viewport--portrait .division-title {
+  height: 32px;
+  padding-top: 6px;
+}
+
+.dos-viewport--portrait .original-standing-row {
+  min-height: 38px;
+  height: 38px;
+  grid-template-columns: minmax(0, 1fr) repeat(3, 22px) 48px 28px;
+  align-items: center;
+  column-gap: 2px;
+}
+
+.dos-viewport--portrait .season-end {
+  padding: 6px;
+}
+
+.dos-viewport--portrait .awards-grid {
+  height: auto;
+  grid-template-columns: 1fr;
+}
+
+.dos-viewport--portrait .award-panel {
+  min-height: 138px;
+  padding: 8px;
+  line-height: 20px;
+}
+.dos-viewport--portrait .award-row { margin-bottom: 8px; }
+.dos-viewport--portrait .award-row > span { font-size: 12px; }
+.dos-viewport--portrait .division-awards { margin-bottom: 12px; }
+.dos-viewport--portrait .division-awards-title { font-size: 12px; line-height: 20px; }
+.dos-viewport--portrait .award-row--compact { grid-template-columns: 20px minmax(0, 1fr) auto; margin-bottom: 4px; }
+.dos-viewport--portrait .season-manager-status { height: auto; min-height: 54px; flex-direction: column; gap: 0; font-size: 14px; line-height: 18px; padding: 4px; }
+
+.dos-viewport--portrait .job-offers {
+  height: auto;
+  min-height: 180px;
+}
+
+.dos-viewport--portrait .job-offers button {
+  min-height: 64px;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr) 65px 52px;
+  gap: 4px;
+}
+
+.dos-viewport--portrait .job-offers button span:last-child {
+  grid-column: 1 / -1;
+}
+
+.dos-viewport--portrait .season-actions {
+  min-height: 104px;
+  height: auto;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dos-viewport--portrait .season-actions button {
+  min-height: 48px;
+  text-align: center;
+}
+
+/* Multiplayer portrait layout: the chat becomes a bottom terminal. */
+.dos-viewport--portrait .multiplayer-entry {
+  padding: 6px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-title,
+.dos-viewport--portrait .multiplayer-lobby-title {
+  min-height: 52px;
+  height: auto;
+  padding: 15px 6px 8px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-menu,
+.dos-viewport--portrait .multiplayer-entry-form {
+  position: static;
+  width: 100%;
+  margin-top: 10dvh;
+}
+
+.dos-viewport--portrait .multiplayer-entry-menu {
+  padding: 0 10px;
+  gap: 12px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-menu button {
+  min-height: 64px;
+  height: auto;
+  padding: 18px 8px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-form {
+  min-height: 260px;
+  padding: 16px 12px;
+  gap: 12px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-form label {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.dos-viewport--portrait .multiplayer-entry-form input,
+.dos-viewport--portrait .multiplayer-entry-form input[aria-label='Código da sala'] {
+  width: 100%;
+}
+
+.dos-viewport--portrait .multiplayer-entry-form button {
+  width: 100%;
+  min-height: 50px;
+  height: auto;
+}
+
+.dos-viewport--portrait .multiplayer-entry-message {
+  position: static;
+  min-height: 38px;
+  margin-top: 12px;
+  padding: 8px;
+}
+
+.dos-viewport--portrait .multiplayer-exit {
+  position: absolute;
+  right: 8px;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  min-height: 48px;
+  padding: 10px;
+}
+
+.dos-viewport--portrait .multiplayer-shell {
+  width: 100%;
+  min-height: 100dvh;
+  height: auto;
+  display: block;
+  overflow: visible;
+  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+}
+
+.dos-viewport--portrait .multiplayer-shell:has(.multiplayer-chat.has-action-timer) {
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
+.dos-viewport--portrait .multiplayer-game-pane {
+  width: 100%;
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
+}
+
+.dos-viewport--portrait .multiplayer-lobby {
+  padding: 6px;
+}
+
+.dos-viewport--portrait .multiplayer-lobby-status {
+  min-height: 54px;
+  height: auto;
+  padding: 15px 4px 7px;
+}
+
+.dos-viewport--portrait .multiplayer-seats {
+  height: auto;
+  padding: 6px;
+}
+
+.dos-viewport--portrait .multiplayer-seats > div {
+  min-height: 38px;
+  height: 38px;
+  grid-template-columns: 25px minmax(0, 1fr) 86px;
+  align-items: center;
+}
+
+.dos-viewport--portrait .multiplayer-share,
+.dos-viewport--portrait .multiplayer-open-wait {
+  height: auto;
+  min-height: 162px;
+  padding: 12px;
+}
+
+.dos-viewport--portrait .multiplayer-share {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 44px 48px auto;
+  gap: 5px;
+}
+
+.dos-viewport--portrait .multiplayer-share input,
+.dos-viewport--portrait .multiplayer-share button,
+.dos-viewport--portrait .multiplayer-share span {
+  grid-column: 1;
+  grid-row: auto;
+}
+
+.dos-viewport--portrait .multiplayer-share button {
+  min-height: 48px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .multiplayer-open-wait {
+  display: grid;
+  place-items: center;
+  line-height: 20px;
+}
+
+.dos-viewport--portrait .multiplayer-lobby-actions {
+  height: auto;
+  min-height: 112px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.dos-viewport--portrait .multiplayer-lobby-actions button {
+  min-height: 48px;
+  text-align: center;
+}
+
+.dos-viewport--portrait .multiplayer-lobby-message {
+  height: auto;
+  min-height: 42px;
+  padding: 8px;
+  white-space: normal;
+}
+
+.dos-viewport--portrait .multiplayer-chat {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  height: calc(48px + env(safe-area-inset-bottom));
+  border-top: 4px double var(--gray);
+  border-left: 0;
+  grid-template-rows: 48px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.dos-viewport--portrait .multiplayer-chat.has-action-timer {
+  height: calc(92px + env(safe-area-inset-bottom));
+  grid-template-rows: 48px 44px;
+}
+
+.dos-viewport--portrait .multiplayer-chat.mobile-open {
+  height: min(68dvh, 560px);
+  grid-template-rows: 48px auto 1fr 54px;
+}
+
+.dos-viewport--portrait .multiplayer-chat.mobile-open.has-action-timer {
+  grid-template-rows: 48px 44px auto 1fr 54px;
+}
+
+.dos-viewport--portrait .multiplayer-room-head {
+  min-height: 48px;
+  padding: 9px 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.dos-viewport--portrait .multiplayer-chat-toggle {
+  display: block;
+  min-height: 32px;
+  padding: 4px 6px;
+  color: var(--yellow);
+  border: 1px solid currentColor;
+}
+
+.dos-viewport--portrait .multiplayer-timer {
+  min-height: 44px;
+  height: 44px;
+  padding: 4px 8px;
+}
+
+.dos-viewport--portrait .multiplayer-chat:not(.mobile-open) .multiplayer-player-strip,
+.dos-viewport--portrait .multiplayer-chat:not(.mobile-open) .multiplayer-chat-log,
+.dos-viewport--portrait .multiplayer-chat:not(.mobile-open) .multiplayer-chat-form {
+  display: none;
+}
+
+.dos-viewport--portrait .multiplayer-player-strip {
+  max-height: 150px;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.dos-viewport--portrait .multiplayer-player-strip > div {
+  min-height: 24px;
+  grid-template-columns: 16px minmax(0, 1fr) 94px;
+}
+
+.dos-viewport--portrait .multiplayer-chat-log {
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.dos-viewport--portrait .multiplayer-chat-form {
+  grid-template-columns: minmax(0, 1fr) 72px;
+  padding: 5px;
+}
+
+.dos-viewport--portrait .multiplayer-chat-form input,
+.dos-viewport--portrait .multiplayer-chat-form button {
+  min-height: 44px;
+}
+
+.dos-viewport--portrait .multiplayer-chat-form button {
+  text-align: center;
+}
+
+.dos-viewport--portrait .multiplayer-season-end {
+  padding: 18px 8px 70px;
+}
+
+.dos-viewport--portrait .multiplayer-season-end button,
+.dos-viewport--portrait .multiplayer-season-end .season-continue {
+  position: static;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.competition-matchday-board { padding-top: 39px; overflow-y: auto; }
+.competition-matchday-fixtures {
+  height: auto;
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  column-gap: 8px;
+  border-bottom: 0;
+}
+.competition-matchday-fixtures .matchday-row {
+  width: 298px;
+  grid-template-columns: 77px 20px 77px 20px 1fr;
+}
+.competition-matchday-fixtures .matchday-goal-slot { grid-column: 5; }
+.competition-matchday-fixtures .matchday-attendance { display: none; }
+
+.competition-results-screen {
+  width: 640px;
+  height: 400px;
+  padding: 18px 12px 12px;
+  color: var(--green);
+  display: flex;
+  flex-direction: column;
+}
+.competition-results-title { color: var(--yellow); text-align: center; }
+.competition-results-stage { margin: 8px 0; text-align: center; }
+.competition-results-list { min-height: 0; padding: 8px; overflow-y: auto; }
+.competition-prize { flex-shrink: 0; margin-bottom: 8px; padding: 6px; color: var(--black); text-align: center; }
+.competition-results-title, .competition-results-stage, .competition-results-continue { flex-shrink: 0; }
+.competition-result-row {
+  height: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 8px;
+}
+.competition-result-row > b { color: var(--white); text-align: center; }
+.competition-result-row > :last-child { text-align: right; }
+.competition-results-continue { margin-top: 8px; color: var(--yellow); text-align: center; }
+
+.libertadores-screen { width: 640px; height: 400px; padding: 6px; color: var(--blue); }
+.libertadores-status { height: 30px; padding-top: 8px; text-align: center; }
+.libertadores-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px; }
+.libertadores-group { padding: 3px; border: 2px solid var(--blue); }
+.libertadores-group-title { color: var(--yellow); background: var(--blue); text-align: center; }
+.libertadores-table-row { height: 17px; display: grid; grid-template-columns: 17px minmax(0, 1fr) 20px 24px 22px; }
+.libertadores-table-row span:nth-last-child(-n + 2), .libertadores-table-row b { text-align: right; }
+.libertadores-table-row:nth-child(2), .libertadores-table-row:nth-child(3) { font-weight: bold; }
+.libertadores-knockout { display: grid; grid-template-columns: 2fr 1.25fr 1fr; gap: 7px; margin-top: 7px; }
+.libertadores-knockout-round { min-height: 84px; padding: 3px; border: 2px solid var(--blue); }
+.libertadores-knockout-round > div:first-child { color: var(--yellow); background: var(--blue); text-align: center; }
+.libertadores-knockout-match { height: 16px; display: grid; grid-template-columns: 1fr 42px 1fr; gap: 2px; }
+.libertadores-knockout-match b { text-align: center; }
+.libertadores-knockout-match span:last-child { text-align: right; }
+
+.dos-viewport--portrait .competition-matchday-fixtures { grid-template-columns: 1fr; }
+.dos-viewport--portrait .competition-matchday-fixtures .matchday-row { width: 100%; }
+.dos-viewport--portrait .competition-results-screen,
+.dos-viewport--portrait .libertadores-screen,
+.dos-viewport--portrait .injury-screen { width: 100%; height: auto; min-height: calc(100dvh - 16px); }
+.dos-viewport--portrait .competition-results-screen { padding: 18px 8px 70px; }
+.dos-viewport--portrait .injury-screen { padding: 18px 8px 70px; }
+.dos-viewport--portrait .injury-screen-list { min-height: 45dvh; }
+.dos-viewport--portrait .competition-results-list { flex-shrink: 0; }
+.dos-viewport--portrait .competition-result-row { min-height: 44px; height: auto; grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr); }
+.dos-viewport--portrait .libertadores-screen { padding: 8px 8px 70px; }
+.dos-viewport--portrait .libertadores-status { height: auto; min-height: 48px; line-height: 20px; }
+.dos-viewport--portrait .libertadores-groups,
+.dos-viewport--portrait .libertadores-knockout { grid-template-columns: 1fr; }
+.dos-viewport--portrait .libertadores-table-row { min-height: 36px; height: 36px; align-items: center; }
+.dos-viewport--portrait .libertadores-knockout-match { min-height: 34px; height: 34px; align-items: center; }
+
+/* League controls remain reachable above the mobile chat drawer. */
+.dos-viewport--portrait .saved-leagues { width: 100%; min-height: 100dvh; height: auto; padding: 16px 10px; }
+.dos-viewport--portrait .saved-leagues-list { max-height: 65dvh; flex: auto; }
+.dos-viewport--portrait .saved-leagues-list button { min-height: 60px; }
+.dos-viewport--portrait .saved-leagues > button { min-height: 44px; }
+.dos-viewport--portrait .multiplayer-chat.has-league-controls { height: auto; max-height: 75dvh; grid-template-rows: 48px auto; }
+.dos-viewport--portrait .multiplayer-chat.has-league-controls.has-action-timer { grid-template-rows: 48px auto 44px; }
+.dos-viewport--portrait .multiplayer-chat.has-league-controls.mobile-open { height: min(75dvh, 640px); grid-template-rows: 48px auto auto minmax(0, 1fr) 54px; }
+.dos-viewport--portrait .multiplayer-chat.has-league-controls.mobile-open.has-action-timer { grid-template-rows: 48px auto 44px auto minmax(0, 1fr) 54px; }
+.dos-viewport--portrait .multiplayer-league-controls button { min-height: 40px; flex: 1; }
+.dos-viewport--portrait .multiplayer-shell:has(.multiplayer-chat.has-league-controls) { padding-bottom: calc(160px + env(safe-area-inset-bottom)); }
+.dos-viewport--portrait .multiplayer-pause { position: fixed; inset: 20dvh 12px auto; padding: 20px 10px; }
+
+.dos-viewport--portrait .sponsorship-screen { width: 100%; height: auto; min-height: 100dvh; padding: 8px 8px 20px; }
+.dos-viewport--portrait .sponsorship-title { min-height: 48px; padding: 8px; line-height: 20px; }
+.dos-viewport--portrait .sponsorship-offers { grid-template-columns: 1fr; flex: none; gap: 10px; margin: 12px 0 0; }
+.dos-viewport--portrait .sponsor-offer { padding: 10px; }
+.dos-viewport--portrait .sponsor-brand { font-size: 26px; line-height: 30px; }
+.dos-viewport--portrait .sponsor-description { font-size: 13px; line-height: 20px; white-space: normal; }
+.dos-viewport--portrait .sponsor-terms { margin: 8px 0 12px; }
+.dos-viewport--portrait .sponsor-terms > div { min-height: 28px; }
+.dos-viewport--portrait .sponsor-terms dt { font-size: 12px; }
+.dos-viewport--portrait .sponsor-terms dd { font-size: 15px; }
+.dos-viewport--portrait .sponsor-sign { min-height: 44px; }
+.dos-viewport--portrait .finance-sponsor-contract { font-size: 13px; line-height: 19px; padding: 6px 0; }
+.dos-viewport--portrait .sponsorship-notice-screen { width: 100%; height: auto; min-height: 100dvh; padding: 18px; }
+.dos-viewport--portrait .sponsorship-notice-message { padding: 20px; line-height: 26px; }
+
+/* Annual retirements */
+.retirement-screen { width: 640px; height: 400px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.retirement-title { flex: none; margin: 0; padding: 10px; font-size: 20px; line-height: 24px; text-align: center; color: var(--yellow); }
+.retirement-club { flex: none; text-align: center; line-height: 20px; color: var(--yellow); }
+.retirement-list { flex: 1; min-height: 0; overflow-y: auto; }
+.retirement-list table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; }
+.retirement-list th { position: sticky; top: 0; background: var(--black); color: var(--yellow); font-weight: normal; }
+.retirement-list th, .retirement-list td { padding: 6px 8px; line-height: 18px; overflow-wrap: anywhere; }
+.retirement-list th:first-child { width: 52px; }
+.retirement-list th:last-child { width: 88px; }
+.retirement-list td:last-child { white-space: nowrap; }
+.retirement-continue { flex: none; min-height: 34px; color: var(--yellow); text-align: center; }
+.retirement-waiting { margin: auto; text-align: center; line-height: 24px; }
+.dos-viewport--portrait .retirement-screen { width: 100%; height: 100dvh; min-height: 400px; padding: 10px; }
+.dos-viewport--portrait .retirement-title { font-size: 19px; }
+.dos-viewport--portrait .retirement-list th, .dos-viewport--portrait .retirement-list td { padding: 10px 6px; line-height: 22px; }
+.dos-viewport--portrait .retirement-continue { min-height: 44px; }
+
+/* Annual academy selection */
+.academy-screen { width: 640px; height: 400px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.academy-title { flex: none; margin: 0; padding: 8px; font-size: 20px; line-height: 24px; text-align: center; color: var(--yellow); }
+.academy-club, .academy-choice-count { flex: none; text-align: center; line-height: 18px; }
+.academy-club { color: var(--yellow); }
+.academy-quotas { display: flex; justify-content: space-evenly; flex: none; line-height: 20px; }
+.academy-quotas .complete { color: var(--light-green); }
+.academy-list { flex: 1; min-height: 0; overflow-y: auto; }
+.academy-row { display: grid; width: 100%; grid-template-columns: 28px 36px minmax(0, 1fr) 52px 46px 92px; align-items: center; gap: 4px; padding: 6px; font-size: 12px; line-height: 18px; text-align: left; }
+.academy-row > span:nth-child(3) { overflow-wrap: anywhere; }
+.academy-row > span:last-child { text-align: right; white-space: nowrap; }
+.academy-list-heading { position: sticky; top: 0; z-index: 1; color: var(--yellow); background: var(--black); }
+.academy-candidate[aria-pressed="true"] { color: var(--yellow); background: var(--blue); }
+.academy-candidate:disabled { color: var(--gray); }
+.academy-actions { flex: none; text-align: center; }
+.academy-confirm { min-height: 34px; width: 100%; color: var(--yellow); text-align: center; }
+.academy-confirm:disabled { color: var(--gray); }
+.academy-message { font-size: 11px; line-height: 16px; }
+.academy-waiting { margin: auto; text-align: center; line-height: 24px; }
+.dos-viewport--portrait .academy-screen { width: 100%; height: 100dvh; min-height: 440px; padding: 8px; }
+.dos-viewport--portrait .academy-title { font-size: 18px; }
+.dos-viewport--portrait .academy-row { grid-template-columns: 24px 28px minmax(0, 1fr) 34px 28px 68px; min-height: 44px; padding: 7px 4px; gap: 3px; font-size: 12px; line-height: 18px; }
+.dos-viewport--portrait .academy-list-heading { font-size: 10px; min-height: 34px; }
+.dos-viewport--portrait .academy-confirm { min-height: 44px; }

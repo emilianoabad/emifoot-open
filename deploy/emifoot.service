@@ -1,0 +1,24 @@
+[Unit]
+Description=Emifoot multiplayer room server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=emifoot
+Group=emifoot
+WorkingDirectory=/srv/emifoot/current
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=8789
+ExecStart=/usr/bin/node /srv/emifoot/current/server/index.js
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

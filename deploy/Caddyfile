@@ -1,0 +1,12 @@
+:8080 {
+	encode gzip zstd
+	handle /ws {
+		reverse_proxy 127.0.0.1:8789 {
+			header_up X-Real-IP {remote_host}
+		}
+	}
+	handle {
+		root * /srv/emifoot/current/web
+		file_server
+	}
+}
