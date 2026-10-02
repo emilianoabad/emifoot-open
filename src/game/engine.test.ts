@@ -364,6 +364,37 @@ describe('game commands', () => {
     expect(acknowledged.injuryNoticePending).toBeUndefined()
   })
 
+  it.each([false, true])('respects the foreign limit for automatic injury substitutions (only foreign reserves: %s)', (onlyForeignReserves) => {
+    const state = createNewCareer({ managerName: 'Substituição', seed: 37 })
+    state.phase = 'pre-round'
+    state.market = []
+    const started = unwrap(startRound(state))
+    const club = getManagerClub(started)
+    const injured = club.players.find((player) => player.position === 'A' && club.lineup.includes(player.id))!
+    for (const player of club.players) player.nationality = 'BRA'
+    const starters = club.players.filter((player) => club.lineup.includes(player.id) && player.id !== injured.id)
+    for (const player of starters.slice(0, 4)) player.nationality = 'ARG'
+    const reserves = club.players.filter((player) => !club.lineup.includes(player.id))
+    for (const player of reserves) {
+      player.nationality = 'ARG'
+      player.injuryRounds = 0
+      player.suspensionRounds = 0
+    }
+    const legalReserve = reserves.find((player) => player.position !== 'G')!
+    if (!onlyForeignReserves) legalReserve.nationality = 'BRA'
+    const fixture = started.pendingMatchDay!.matches.find((match) => match.homeId === club.id || match.awayId === club.id)!
+    fixture.events.push({ minute: 40, type: 'injury', clubId: club.id, playerId: injured.id, playerName: injured.name, durationRounds: 3 })
+
+    const completed = unwrap(finishRound(unwrap(reachHalfTime(started))))
+    const events = completed.lastReport!.leagueResults.find((match) => match.id === fixture.fixtureId)!.result!.events
+    const replacement = events.find((event) => event.type === 'substitution' && event.clubId === club.id
+      && event.detail === `entra por ${injured.name} (lesão)`)
+    if (onlyForeignReserves) expect(replacement).toBeUndefined()
+    else expect(replacement?.playerId).toBe(legalReserve.id)
+    injured.injuryRounds = 3
+    expect(validateLineup(club)).toBe(onlyForeignReserves ? undefined : 'Há jogador lesionado ou suspenso entre os titulares.')
+  })
+
   it.each(['G', 'A'] as const)('keeps exactly one keeper when no legal injury replacement exists for %s', (position) => {
     const state = createNewCareer({ managerName: 'Reserva', seed: 37 })
     state.phase = 'pre-round'

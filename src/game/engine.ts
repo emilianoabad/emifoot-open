@@ -20,7 +20,7 @@ import { agePlayer, developAfterMatch } from './development'
 import { calculatePlayerValue, updateSupportersAfterMatch } from './economy'
 import { createJobOffers } from './jobs'
 import { buildLibertadoresQuarterfinals, buildNextLibertadoresRound, createLibertadores } from './libertadores'
-import { autoPickLineup, getAvailableTactics, replaceStarter, validateLineup } from './lineup'
+import { autoPickLineup, canReplaceUnavailableStarter, getAvailableTactics, replaceStarter, validateLineup } from './lineup'
 import { beginPreseason, renewSquads } from './lifecycle'
 import { simulateFirstHalf, simulateSecondHalf } from './match'
 import { random, randomInt } from './rng'
@@ -210,8 +210,7 @@ function automaticInjurySubstitution(club: Club, events: MatchEvent[]): void {
     injured.injuryRounds = Math.max(injured.injuryRounds, event.durationRounds ?? 1)
     if (!club.lineup.includes(injured.id)) continue
     const candidates = club.players
-      .filter((player) => player.id !== injured.id && player.injuryRounds === 0 && player.suspensionRounds === 0 && !club.lineup.includes(player.id)
-        && (player.position === 'G') === (injured.position === 'G'))
+      .filter((player) => canReplaceUnavailableStarter(club, injured, player))
       .sort((a, b) => Number(b.position === injured.position) - Number(a.position === injured.position) || b.strength - a.strength || b.fitness - a.fitness)
     const substitute = candidates[0]
     if (!substitute) continue

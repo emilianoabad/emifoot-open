@@ -109,15 +109,20 @@ export function autoPickLineup(club: Club, tacticId: TacticId = club.tactic): { 
   return { lineup, bench }
 }
 
+export function canReplaceUnavailableStarter(club: Club, outgoing: Player, incoming: Player): boolean {
+  if (!available(incoming) || club.lineup.includes(incoming.id)
+    || (outgoing.position === 'G') !== (incoming.position === 'G')) return false
+  const remainingForeigners = club.players.filter((player) => club.lineup.includes(player.id)
+    && player.id !== outgoing.id && player.nationality !== 'BRA').length
+  return remainingForeigners + Number(incoming.nationality !== 'BRA') <= foreignStarterLimit(club)
+}
+
 export function validateLineup(club: Club): string | undefined {
   const starters = club.lineup.map((id) => club.players.find((player) => player.id === id)).filter((player): player is Player => Boolean(player))
   if (starters.length !== 11 || new Set(club.lineup).size !== 11) return 'A equipa titular deve ter 11 jogadores.'
   if (starters.filter((player) => player.position === 'G').length !== 1) return 'A equipa precisa de exatamente um goleiro.'
-  const replaceableUnavailablePlayer = starters.find((player) => !available(player) && club.players.some((candidate) => (
-    available(candidate)
-    && !club.lineup.includes(candidate.id)
-    && (player.position === 'G') === (candidate.position === 'G')
-  )))
+  const replaceableUnavailablePlayer = starters.find((player) => !available(player)
+    && club.players.some((candidate) => canReplaceUnavailableStarter(club, player, candidate)))
   if (replaceableUnavailablePlayer) return 'Há jogador lesionado ou suspenso entre os titulares.'
   if (starters.filter((player) => player.nationality !== 'BRA').length > foreignStarterLimit(club)) return 'Só podem jogar quatro estrangeiros.'
   return undefined

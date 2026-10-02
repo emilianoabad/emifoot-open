@@ -5,8 +5,8 @@ import type { Division } from './types'
 import { fastForwardSeason } from '../test/simulation'
 
 describe('long-running simulation', () => {
-  it('completes the previously failing regression seed', () => {
-    const completed = fastForwardSeason(createNewCareer({ managerName: 'Teste', seed: 755_634_927 }))
+  it.each([755_634_927, 1_403_466_906])('completes regression seed %i', (seed) => {
+    const completed = fastForwardSeason(createNewCareer({ managerName: 'Teste', seed }))
     expect(completed.ok, completed.ok ? undefined : completed.error).toBe(true)
   })
 
