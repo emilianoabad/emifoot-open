@@ -38,7 +38,7 @@ export function siteMetadata(site: SiteConfig): Plugin {
     },
     transformIndexHtml(html, context) {
       const pageUrl = site.publicUrl && new URL(context.path.includes('/invite/') ? 'invite/' : '', site.publicUrl).toString()
-      const imageUrl = site.publicUrl ? new URL('og-emifoot.png', site.publicUrl).toString() : `${site.base}og-emifoot.png`
+      const imageUrl = site.publicUrl ? new URL('og-emifoot-matchday.png', site.publicUrl).toString() : `${site.base}og-emifoot-matchday.png`
       // Absolute metadata belongs to the configured installation, never to a developer's site.
       return html
         .replace(/^.*__EMIFOOT_PAGE_URL__.*\n/gm, (line) => pageUrl ? line.replaceAll('__EMIFOOT_PAGE_URL__', pageUrl) : '')

@@ -89,7 +89,7 @@ test('creates, manages, saves, and resumes a solo career', async ({ page }, test
 test('joins an invitation through the configured installation path', async ({ page, request }) => {
   const response = await request.get('./invite/?room=abc234')
   expect(response.ok()).toBe(true)
-  expect(await response.text()).toContain('http://127.0.0.1:4173/qa/og-emifoot.png')
+  expect(await response.text()).toContain('http://127.0.0.1:4173/qa/og-emifoot-matchday.png')
   await page.goto('./invite/?room=abc234&creator=Unused')
   await expect(page).toHaveURL('http://127.0.0.1:4173/qa/?room=ABC234')
   await expect(page.getByText('SALA ABC234', { exact: true })).toBeVisible()
