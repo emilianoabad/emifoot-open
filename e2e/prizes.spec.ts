@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { resumeFixture } from './fixtures'
+import { resumeFixture, waitForSavedPhase } from './fixtures'
 import {
   acknowledgeAuctionResult, acknowledgeInjuryNotice, advanceAfterStandings,
   completeCupDraw, confirmManagerRegistration, createNewCareer, finishRound,
@@ -50,6 +50,8 @@ test('resumes cup results with the credited prize and continues to the next leag
 
 test('shows every season prize without clipping and starts the next season', async ({ page }, testInfo) => {
   const state = unwrap(fastForwardSeason(createNewCareer({ managerName: 'Prêmios QA', seed: 77 })))
+  // Retirement and academy journeys cover their own transitions; isolate awards and signing here.
+  for (const club of state.clubs) for (const player of club.players) player.age = 25
   const errors = await resumeFixture(page, state)
   await expect(page.locator('.season-banner')).toHaveText('FIM DA TEMPORADA 2026')
   await expect(page.locator('.award-amount')).toHaveText([
@@ -85,6 +87,7 @@ test('shows every season prize without clipping and starts the next season', asy
     })
   })).toBe(true)
   await page.screenshot({ path: testInfo.outputPath('sponsorship-offers.png'), fullPage: true })
+  await waitForSavedPhase(page, 'sponsorship')
   await page.reload()
   await page.getByRole('button', { name: /CONTINUAR CARREIRA/ }).click()
   await expect(page.getByRole('button', { name: /Assinar com/ })).toHaveCount(3)
