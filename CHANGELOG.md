@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3
+
+- Use a real screenshot of matches in progress for home-page and invitation
+  sharing previews, with descriptive image text and a fresh image URL.
+
 ## 1.1.2
 
 - Separate attacking and defensive quality while retaining every position's
