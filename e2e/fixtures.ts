@@ -1,6 +1,19 @@
 import { expect, type Page } from '@playwright/test'
 import type { GameState } from '../src/game/types'
 
+export async function waitForSavedPhase(page: Page, phase: GameState['phase']): Promise<void> {
+  await expect.poll(() => page.evaluate(() => new Promise<string | undefined>((resolve, reject) => {
+    const request = indexedDB.open('emifoot', 1)
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      const db = request.result
+      const read = db.transaction('saves').objectStore('saves').get('career')
+      read.onsuccess = () => { db.close(); resolve(read.result?.state.phase) }
+      read.onerror = () => { db.close(); reject(read.error) }
+    }
+  }))).toBe(phase)
+}
+
 export async function resumeFixture(page: Page, state: GameState): Promise<string[]> {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))

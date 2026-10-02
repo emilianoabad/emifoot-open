@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { resumeFixture } from './fixtures'
+import { resumeFixture, waitForSavedPhase } from './fixtures'
 import {
   acceptSponsorshipOffer, createNewCareer, finishRoundForManagedClubs, getSponsorBrand, nextBettingRegulation,
   reachHalfTime, showStandings, startNextSeason, startRoundForManagedClubs,
@@ -52,6 +52,7 @@ for (const allowed of [false, true]) {
     await expect(page.locator('.sponsorship-notice-title')).toBeInViewport()
     await expect(page.locator('.sponsorship-notice-continue')).toBeInViewport()
     await page.screenshot({ path: testInfo.outputPath(allowed ? 'betting-resumed.png' : 'betting-suspended.png'), fullPage: true })
+    await waitForSavedPhase(page, 'sponsorship-notice')
     await page.reload()
     await page.getByRole('button', { name: /CONTINUAR CARREIRA/ }).click()
     await expect(page.locator('.sponsorship-notice-message')).toContainText(allowed ? 'APOSTAS LIBERADAS' : 'Medida Provisória')
