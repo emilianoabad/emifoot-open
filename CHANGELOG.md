@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.4
+
+- Keep automatic injury substitutions within the four-foreigner limit, avoiding
+  an illegal lineup that could block the second half.
+- Wait for the saved sponsorship notice before testing a browser reload.
+
 ## 1.1.3
 
 - Use a real screenshot of matches in progress for home-page and invitation
