@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.5
+
+- Isolate the season-prize browser journey from retirement events and wait for
+  sponsorship offers to be saved before reloading.
+
 ## 1.1.4
 
 - Keep automatic injury substitutions within the four-foreigner limit, avoiding
